@@ -1,0 +1,7 @@
+<List of libraries that i need for this project>
+
+playwright
+beautifulsoup4
+lxml
+jamo
+pyinstaller
