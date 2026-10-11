@@ -1,0 +1,30 @@
+[
+  {
+    "url": "http://localhost:8000/board.html",
+    "location": "html > body > table.board-list > tbody > tr:nth-of-type(2) > td.title > a",
+    "evidence_text": "ｍｅｇａ－ＢＥＴ 첫충 30％ 지급",
+    "technique": "HOMOGLYPH",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view1.html",
+    "location": "html > body > p.notice",
+    "evidence_text": "саsіnо 가입코드 LUCKY7",
+    "technique": "HOMOGLYPH",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view1.html",
+    "location": "html > body > p.desc",
+    "evidence_text": "ㅋㅏㅈㅣㄴㅗ ㅂㅗㄴㅓㅅㅡ 코드 LUCKY7",
+    "technique": "JAMO",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view1.html",
+    "location": "html > body > p.split",
+    "evidence_text": "ㄷㅗㅂㅏㄱ",
+    "technique": "JAMO",
+    "is_violation": true
+  }
+]
