@@ -201,6 +201,7 @@ class WebCrawler:
 
                     results.push({
                         text: trimmedDirectText || fullInnerText,
+                        direct_text: trimmedDirectText,
                         full_text: fullInnerText,
                         location: getUniqueCssSelector(el),
                         style: {
@@ -272,7 +273,6 @@ if __name__ == "__main__":
         print(f"수집된 총 요소 수: {len(result['elements'])}")
 
     asyncio.run(test_run())
-
 # 중복 수집: div, span 같은 래퍼 요소도 선택 대상입니다. 직접 텍스트가 없으면 text에 하위 전체 텍스트(fullInnerText)가 들어가므로, 같은 텍스트가 부모 요소 수만큼 반복해서 저장됩니다. 데이터가 불필요하게 커질 수 있습니다.
 # 실패한 페이지도 카운트: visited_keys.add가 접속 시도 전에 실행되어서, 접속에 실패한 URL도 max_pages 카운트에 포함됩니다.
 # response 변수는 안 쓰입니다. goto의 반환값을 받아놓고 사용하지 않습니다. HTTP 상태코드 확인에 쓸 수 있습니다.
