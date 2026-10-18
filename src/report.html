@@ -1,0 +1,40 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>불법광고 탐지 결과 리포트</title><style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2430;--mute:#5b6675;--line:#e3e7ee;--accent:#1d4ed8}
+@media (prefers-color-scheme:dark){:root{--bg:#0f141b;--card:#171e28;--ink:#e6ebf2;--mute:#9aa6b6;--line:#2a3442;--accent:#7aa2ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--mute);font-size:13px;word-break:break-all}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:20px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card .n{font-size:28px;font-weight:700}.card .l{font-size:13px;color:var(--mute)}
+.bar{height:8px;border-radius:4px;background:var(--line);margin-top:8px;overflow:hidden}.bar i{display:block;height:100%}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
+.tools button,.tools input{font:inherit;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.tools button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:9px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);font-size:13.5px}
+th{background:var(--bg);color:var(--mute);font-weight:600}tr:last-child td{border-bottom:0}
+code{font:12.5px/1.5 ui-monospace,Consolas,monospace;word-break:break-all}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;color:#fff;font-size:12px;white-space:nowrap}
+.why{color:var(--mute);font-size:12.5px;margin-top:4px}
+.empty{padding:28px;text-align:center;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:10px}
+details{margin-top:22px;color:var(--mute)}summary{cursor:pointer}
+@media (max-width:700px){th:nth-child(4),td:nth-child(4){display:none}}
+</style></head><body><div class="wrap">
+<h1>불법광고 탐지 결과 리포트</h1>
+<div class="sub">진입 URL: https://www.inu.ac.kr/inu/index.do?epTicket=LOG<br>
+시작 2026-10-18T11:41:37+02:00 · 종료 2026-10-18T11:46:35+02:00 · 소요 298.83초 · 도구 버전 0.1.0</div>
+<div class="cards"><div class="card"><div class="n">0</div><div class="l">총 탐지 건수</div></div><div class="card"><div class="n" style="color:#b45309">0</div><div class="l">닮은꼴 글자 위장 · HOMOGLYPH</div><div class="bar"><i style="width:0%;background:#b45309"></i></div></div><div class="card"><div class="n" style="color:#7c3aed">0</div><div class="l">자모 분해 · JAMO</div><div class="bar"><i style="width:0%;background:#7c3aed"></i></div></div><div class="card"><div class="n" style="color:#0369a1">0</div><div class="l">투명 텍스트 · TRANSPARENT</div><div class="bar"><i style="width:0%;background:#0369a1"></i></div></div><div class="card"><div class="n" style="color:#be123c">0</div><div class="l">화면 밖 은닉 · OFFSCREEN</div><div class="bar"><i style="width:0%;background:#be123c"></i></div></div></div>
+<div class="tools"><button class="on" data-f="ALL">전체</button><button data-f="HOMOGLYPH">닮은꼴 글자 위장</button><button data-f="JAMO">자모 분해</button><button data-f="TRANSPARENT">투명 텍스트</button><button data-f="OFFSCREEN">화면 밖 은닉</button><input id="q" type="search" placeholder="URL·위치·근거 검색"><span id="cnt" class="sub"></span></div>
+<div class="empty">탐지된 불법광고가 없습니다.</div><table style="display:none"><tbody id="tb"></tbody></table>
+<details><summary>탐지 유형 설명</summary><p><b>닮은꼴 글자 위장 (HOMOGLYPH)</b> — 키릴·전각 문자나 숫자·기호로 글자를 바꿔 필터를 피하는 기법</p><p><b>자모 분해 (JAMO)</b> — 음절을 자모 단위로 쪼개 키워드 검사를 피하는 기법</p><p><b>투명 텍스트 (TRANSPARENT)</b> — 배경색과 같은 글자색, opacity:0, color:transparent 등으로 글을 보이지 않게 하는 기법</p><p><b>화면 밖 은닉 (OFFSCREEN)</b> — font-size 0~1px, 화면 밖 좌표(left:-9999px), display:none 등으로 숨기는 기법</p></details>
+<div class="sub" style="margin-top:18px">생성 시각 2026-10-18T11:46:35+02:00</div>
+</div><script>
+const rows=[...document.querySelectorAll('#tb tr')];let tech='ALL';
+function apply(){const q=document.getElementById('q').value.toLowerCase();let n=0;
+rows.forEach(r=>{const ok=(tech==='ALL'||r.dataset.t===tech)&&r.textContent.toLowerCase().includes(q);r.style.display=ok?'':'none';if(ok)n++;});
+document.getElementById('cnt').textContent=n+'건 표시';}
+document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{tech=b.dataset.f;document.querySelectorAll('[data-f]').forEach(x=>x.classList.toggle('on',x===b));apply();});
+document.getElementById('q').oninput=apply;apply();
+</script></body></html>

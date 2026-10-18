@@ -9,6 +9,12 @@ from urllib.parse import urlparse, urljoin, parse_qsl, urlencode
 from typing import List, Dict, Any, Set, Optional, Tuple
 from playwright.async_api import async_playwright, Page, Frame
 
+# HTML 이 아닌 파일(다운로드/미디어)은 페이지가 아니므로 크롤링하지 않는다
+FILE_EXTS = (".pdf", ".hwp", ".hwpx", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".zip", ".rar", ".7z",
+             ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp", ".mp3", ".mp4", ".avi", ".wmv", ".mov",
+             ".txt", ".csv", ".xml", ".json", ".exe", ".apk", ".css", ".js", ".ico")
+
+
 def url_template(url: str) -> str:
     """URL 의 '생김새'. 숫자를 #로 바꾸고 쿼리는 키 순서로 정렬한다.
     예) /bbs/view.do?nttId=123&bbsId=BBSMSTR_0004 -> /bbs/view.do?bbsId=BBSMSTR_#&nttId=#"""
@@ -58,6 +64,12 @@ class FairQueue:
     def __len__(self) -> int:
         return sum(len(q) for q in self.buckets.values())
 
+async def _normal_user_agent(browser) -> str:
+    """헤드리스 Chromium 의 UA 에는 'HeadlessChrome' 이 들어 있어 일부 사이트가 접속을 막는다. 일반 Chrome 표기로 맞춘다."""
+    ua = browser.version
+    return (f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            f"(KHTML, like Gecko) Chrome/{ua} Safari/537.36")
+
 
 class WebCrawler:
     """
@@ -92,7 +104,8 @@ class WebCrawler:
 
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
-            context = await browser.new_context()
+            ua = await _normal_user_agent(browser)
+            context = await browser.new_context(user_agent=ua, locale="ko-KR")
 
             # 이미지/영상/폰트는 텍스트 탐지에 필요 없으므로 받지 않는다 (속도)
             async def _block_heavy(route):
@@ -159,11 +172,25 @@ class WebCrawler:
     async def _crawl_one(self, page: Page, target_url: str, dedup_key: str, order: int,
                          page_results, urls_to_visit, queued_keys, timing) -> None:
         t0 = time.time()
+        response = None
+        for attempt, limit in enumerate((30000, 45000)):
+            try:
+                # 서버가 응답을 시작하면(commit) 진행한다. 느린 외부 스크립트 때문에 DOMContentLoaded 가 늦어도 받은 만큼으로 검사한다.
+                response = await page.goto(target_url, wait_until="commit", timeout=limit)
+                break
+            except Exception as e:
+                msg = str(e).splitlines()[0]
+                if "Download is starting" in msg:           # 파일 다운로드 주소: 페이지가 아니므로 조용히 건너뜀
+                    return
+                if attempt == 0:
+                    print(f"[!] 접속 지연, 재시도합니다 ({target_url}): {msg}")
+                else:
+                    print(f"[!] 페이지 접속 실패 ({target_url}): {msg}")
+                    return
         try:
-            response = await page.goto(target_url, wait_until="domcontentloaded", timeout=15000)
-        except Exception as e:
-            print(f"[!] 페이지 접속 실패 ({target_url}): {e}")
-            return
+            await page.wait_for_load_state("domcontentloaded", timeout=8000)
+        except Exception:
+            pass
         t1 = time.time()
         # 동적으로 붙는 내용(댓글 등)을 위해 네트워크가 잠잠해질 때까지 최대 2초, 그 뒤 잠깐 더
         try:
@@ -241,7 +268,8 @@ class WebCrawler:
                 full_url = urljoin(page.url, href)
                 parsed = urlparse(full_url)
                 
-                if parsed.netloc == self.domain and parsed.scheme in ('http', 'https'):
+                if parsed.netloc == self.domain and parsed.scheme in ('http', 'https') \
+                        and not parsed.path.lower().endswith(FILE_EXTS):
                     valid_links.append(full_url)
             return valid_links
         except Exception as e:

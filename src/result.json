@@ -1,10 +1,10 @@
 {
   "meta": {
-    "topic": "불법광고",
-    "entry_url": "https://www.mois.go.kr/frt/a01/frtMain.do",
-    "started_at": "2026-10-18T10:36:12+02:00",
-    "finished_at": "2026-10-18T10:37:21+02:00",
-    "elapsed_sec": 68.23,
+    "topic": "TOPIC",
+    "entry_url": "https://www.inu.ac.kr/inu/index.do?epTicket=LOG",
+    "started_at": "2026-10-18T11:41:37+02:00",
+    "finished_at": "2026-10-18T11:46:35+02:00",
+    "elapsed_sec": 298.83,
     "tool_version": "0.1.0"
   },
   "findings": []
