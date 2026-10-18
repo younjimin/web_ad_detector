@@ -109,7 +109,20 @@ def _leet_pattern(keyword: str):
     return re.compile(r"(?<![a-z0-9])" + "".join(parts) + r"(?![a-z0-9])")
 
 
+_LEET_CACHE: Dict[str, List[str]] = {}
+
+
 def find_leet_keywords(text: str) -> List[str]:
+    hit = _LEET_CACHE.get(text)
+    if hit is None:
+        hit = _find_leet_keywords(text)
+        if len(_LEET_CACHE) >= 200000:
+            _LEET_CACHE.clear()
+        _LEET_CACHE[text] = hit
+    return list(hit)
+
+
+def _find_leet_keywords(text: str) -> List[str]:
     """숫자/기호로 위장된 영문 금칙어 탐지. text 는 normalize_for_matching 을 거친 것.
     오탐 방지: 매치 안에 '치환 문자가 1개 이상' 있고, '영문자 수 >= 치환 문자 수' 일 때만 인정.
       c4s1n0 (영문 3, 치환 3) -> 인정   /  837 (영문 0, 치환 3) -> 기각   /  B37 (영문 1, 치환 2) -> 기각

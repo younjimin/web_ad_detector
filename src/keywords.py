@@ -60,6 +60,10 @@ DEFAULT_DICT: Dict[str, List[str]] = {
     "exceptions": [
         "성인 인증", "성인인증", "성인 교육", "성인교육", "성인 학습", "성인학습", "성인 대상", "미성년자",
         "청소년 유해", "본인 인증", "본인인증",
+        # 다른 낱말 속에 우연히 들어 있는 경우 (실제 사이트에서 확인된 오탐)
+        "성도박범가",                                  # 인명/기관명 '성도' + '박범가' -> '도박' 오탐
+        "타임슬롯", "타임 슬롯", "time slot", "timeslot",   # '슬롯' (시간대)
+        "배팅 연습", "배팅연습", "배팅 케이지", "배팅케이지", "배팅 훈련",  # 야구 batting
     ],
 }
 
@@ -105,8 +109,19 @@ class Dictionary:
         return soft >= 2 or (n_weak >= 2 and soft >= 1)
 
     def find(self, text: str) -> List[str]:
+        """같은 문장(메뉴·푸터 등)이 페이지마다 반복되므로 결과를 캐시한다."""
         if not text:
             return []
+        cache = self.__dict__.setdefault("_find_cache", {})
+        hit = cache.get(text)
+        if hit is None:
+            hit = self._find(text)
+            if len(cache) >= 200000:
+                cache.clear()
+            cache[text] = hit
+        return list(hit)
+
+    def _find(self, text: str) -> List[str]:
         low = text.lower()
         for ex in self.exceptions:
             low = low.replace(ex, " ")

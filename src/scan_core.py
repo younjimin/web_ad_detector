@@ -18,7 +18,7 @@ from report import write_report
 from result_writer import DEFAULT_TOPIC, build_result, validate_result, write_result
 
 DEFAULT_MAX_PAGES = 1000
-DEFAULT_TIMEOUT_SEC = 1500.0      # 심사 시간 상한 30분보다 여유를 둔 크롤링 제한(25분)
+DEFAULT_TIMEOUT_SEC = 1380.0      # 크롤링 제한 23분: 30분 상한에서 마지막 페이지 마무리·탐지·파일 저장 여유를 남긴다
 DEFAULT_WORKERS = 4
 
 

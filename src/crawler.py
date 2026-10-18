@@ -15,6 +15,10 @@ FILE_EXTS = (".pdf", ".hwp", ".hwpx", ".doc", ".docx", ".xls", ".xlsx", ".ppt", 
              ".txt", ".csv", ".xml", ".json", ".exe", ".apk", ".css", ".js", ".ico")
 
 
+class PageCrashed(Exception):
+    """브라우저 탭이 죽음(메모리 부족 등). 탭을 새로 만들어야 한다."""
+
+
 def url_template(url: str) -> str:
     """URL 의 '생김새'. 숫자를 #로 바꾸고 쿼리는 키 순서로 정렬한다.
     예) /bbs/view.do?nttId=123&bbsId=BBSMSTR_0004 -> /bbs/view.do?bbsId=BBSMSTR_#&nttId=#"""
@@ -115,15 +119,21 @@ class WebCrawler:
                     await route.continue_()
             await context.route("**/*", _block_heavy)
 
+            retried: Set[str] = set()                   # 탭이 죽어서 한 번 다시 시도한 주소
+            RECYCLE_EVERY = 40                          # 탭 하나가 이만큼 처리하면 새 탭으로 바꿔 메모리 누적을 막는다
+
             async def worker(wid: int):
                 page = await context.new_page()
+                done_here = 0
                 try:
                     while True:
                         if self.should_stop():
                             print("[!] 사용자 요청으로 크롤링을 중지합니다.")
                             return
                         if time.time() - start_time > self.total_timeout_sec:
-                            print(f"[!] 제한 시간({self.total_timeout_sec:.0f}초)에 도달해 크롤링을 마칩니다.")
+                            if not state.get("timeout_msg"):
+                                state["timeout_msg"] = True
+                                print(f"[!] 제한 시간({self.total_timeout_sec:.0f}초)에 도달해 크롤링을 마칩니다.")
                             return
                         if len(self.visited_keys) + state["busy"] >= self.max_pages:
                             return
@@ -146,12 +156,36 @@ class WebCrawler:
                             await self._crawl_one(page, target_url, dedup_key, order, page_results,
                                                   urls_to_visit, queued_keys, timing)
                         except Exception as e:
-                            print(f"[!] 페이지 처리 실패 ({target_url}): {type(e).__name__}: {e}")
+                            crashed = isinstance(e, PageCrashed) or "crash" in str(e).lower() or page.is_closed()
+                            if crashed:
+                                print(f"[!] 탭이 종료되어 새 탭으로 교체합니다 ({target_url})")
+                                if dedup_key not in retried:        # 새 탭에서 한 번만 다시 시도
+                                    retried.add(dedup_key)
+                                    urls_to_visit.append((target_url, dedup_key))
+                                try:
+                                    await page.close()
+                                except Exception:
+                                    pass
+                                page = await context.new_page()
+                                done_here = 0
+                            else:
+                                print(f"[!] 페이지 처리 실패 ({target_url}): {type(e).__name__}: {e}")
                         finally:
                             state["busy"] -= 1
                             in_progress.discard(dedup_key)
+                        done_here += 1
+                        if done_here >= RECYCLE_EVERY:
+                            try:
+                                await page.close()
+                            except Exception:
+                                pass
+                            page = await context.new_page()
+                            done_here = 0
                 finally:
-                    await page.close()
+                    try:
+                        await page.close()
+                    except Exception:
+                        pass
 
             await asyncio.gather(*(worker(i) for i in range(self.workers)))
             await browser.close()
@@ -182,15 +216,44 @@ class WebCrawler:
                 msg = str(e).splitlines()[0]
                 if "Download is starting" in msg:           # 파일 다운로드 주소: 페이지가 아니므로 조용히 건너뜀
                     return
+                if "crash" in msg.lower() or page.is_closed():
+                    raise PageCrashed(msg)
                 if attempt == 0:
                     print(f"[!] 접속 지연, 재시도합니다 ({target_url}): {msg}")
                 else:
                     print(f"[!] 페이지 접속 실패 ({target_url}): {msg}")
                     return
+        # 본문이 도착할 때까지 기다린다. DOMContentLoaded 가 느린 외부 스크립트 때문에 늦는 경우는 본문이 이미 있으니 진행하고,
+        # 서버가 본문을 늦게 보내는 경우(본문이 비어 있음)는 더 기다린다.
         try:
-            await page.wait_for_load_state("domcontentloaded", timeout=8000)
+            await page.wait_for_load_state("domcontentloaded", timeout=25000)
         except Exception:
             pass
+        ready = False
+        for _ in range(20):
+            try:
+                ready = await page.evaluate("() => !!(document.body && document.body.innerText && document.body.innerText.trim().length > 0)")
+            except Exception:
+                ready = False
+            if ready:
+                break
+            await asyncio.sleep(0.5)
+        if not ready:
+            print(f"[!] 본문이 비어 있어 건너뜁니다 ({target_url})")
+            return
+        # iframe 안의 문서도 도착할 때까지 기다린다 (느린 서버에서 iframe 내용이 빠지는 것을 막는다)
+        for _ in range(3):                      # iframe 안에 또 iframe 이 있을 수 있어 새 프레임이 더 안 생길 때까지 반복
+            n_before = len(page.frames)
+            for fr in list(page.frames):
+                if fr == page.main_frame:
+                    continue
+                try:
+                    await fr.wait_for_load_state("domcontentloaded", timeout=15000)
+                except Exception:
+                    pass
+            await asyncio.sleep(0.2)
+            if len(page.frames) == n_before:
+                break
         t1 = time.time()
         # 동적으로 붙는 내용(댓글 등)을 위해 네트워크가 잠잠해질 때까지 최대 2초, 그 뒤 잠깐 더
         try:
