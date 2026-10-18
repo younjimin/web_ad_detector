@@ -3,7 +3,8 @@
 > **2026 행정안전부 · NIA 주최 「공공 웹사이트 불법광고 탐지 도구 개발 공모전」 제출용 자동화 프로그램**
 
 ## 🛠️ 프로젝트 구조 (Directory Structure)
-
+````markdown
+```text
 📁 web_ad_detector
  ├── 📁 .github/workflows
  │    └── 📄 build.yml         # GitHub Actions x64 Windows 자동 빌드 CI/CD
