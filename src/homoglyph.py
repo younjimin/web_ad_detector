@@ -38,11 +38,11 @@ CONFUSABLE_MAP: Dict[str, str] = {
     "\u03c5": "u",  # υ (upsilon) - 모양이 u 와 비슷
 }
 
-# 금칙어 사전 (영문은 소문자로 정의)
-BANNED_KEYWORDS: List[str] = [
-    "카지노", "casino", "토토", "바카라", "슬롯", "홀덤", "먹튀", "첫충", "도박", "bet", "slot",
-    "성인만남", "성인 만남", "불법대출", "불법 대출",
-]
+# 금칙어 사전은 keywords.py 에 있다 (strong / weak+유도문구 / 예외, 외부 json 으로 갱신 가능).
+# BANNED_KEYWORDS 는 'strong' 단어 목록(한글+영문)으로, 숫자/기호 위장(leet) 탐지와 기존 코드 호환용이다.
+from keywords import DICTIONARY
+
+BANNED_KEYWORDS: List[str] = DICTIONARY.strong_all
 
 
 def _is_hangul_jamo(ch: str) -> bool:
@@ -129,26 +129,9 @@ def find_leet_keywords(text: str) -> List[str]:
 
 
 def find_keywords(text: str) -> List[str]:
-    """
-    text 안에서 발견되는 금칙어 목록.
-    영문 금칙어는 (?<![a-z0-9])...(?![a-z0-9]) 로 경계를 잡는다 (\\b 는 한글을 단어 문자로 취급).
-    """
-    if not text:
-        return []
-
-    found = []
-    text_lower = text.lower()
-
-    for kw in BANNED_KEYWORDS:
-        if re.match(r"^[a-z0-9]+$", kw):
-            pattern = rf"(?<![a-z0-9]){re.escape(kw)}(?![a-z0-9])"
-            if re.search(pattern, text_lower):
-                found.append(kw)
-        else:
-            if kw in text_lower:
-                found.append(kw)
-
-    return found
+    """text 안에서 발견되는 금칙어 목록 (strong 단독, weak 는 유도 문구와 함께일 때).
+    규칙 전체는 keywords.py 참고."""
+    return DICTIONARY.find(text)
 
 
 def detect_homoglyph(raw_text: str) -> Optional[Dict]:
