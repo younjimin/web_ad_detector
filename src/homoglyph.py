@@ -41,6 +41,7 @@ CONFUSABLE_MAP: Dict[str, str] = {
 # 금칙어 사전 (영문은 소문자로 정의)
 BANNED_KEYWORDS: List[str] = [
     "카지노", "casino", "토토", "바카라", "슬롯", "홀덤", "먹튀", "첫충", "도박", "bet", "slot",
+    "성인만남", "성인 만남", "불법대출", "불법 대출",
 ]
 
 

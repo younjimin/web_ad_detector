@@ -1,103 +1,196 @@
 #Web crawler, DOM parsing
 
 import asyncio
+import math
+import re
 import time
 from collections import deque
 from urllib.parse import urlparse, urljoin, parse_qsl, urlencode
 from typing import List, Dict, Any, Set, Optional, Tuple
 from playwright.async_api import async_playwright, Page, Frame
 
+def url_template(url: str) -> str:
+    """URL 의 '생김새'. 숫자를 #로 바꾸고 쿼리는 키 순서로 정렬한다.
+    예) /bbs/view.do?nttId=123&bbsId=BBSMSTR_0004 -> /bbs/view.do?bbsId=BBSMSTR_#&nttId=#"""
+    try:
+        u = urlparse(url)
+        path = re.sub(r"\d+", "#", u.path)
+        pairs = sorted((k, re.sub(r"\d+", "#", v)) for k, v in parse_qsl(u.query, keep_blank_values=True))
+        return path + ("?" + "&".join(f"{k}={v}" for k, v in pairs) if pairs else "")
+    except Exception:
+        return url
+
+
+class FairQueue:
+    """같은 생김새의 URL 이 방문 순서를 독점하지 못하게 하는 큐.
+    각 '생김새'(템플릿)마다 점수 = (방문한 수 + 1) / sqrt(지금까지 발견된 수) 를 계산하고,
+    점수가 가장 낮은 템플릿의 다음 URL 을 꺼낸다 (동률이면 먼저 발견된 템플릿).
+     - 한 템플릿이 독점하지 못한다 (방문할수록 점수가 올라간다)
+     - 대신 같은 모양이 많이 쏟아지는 템플릿(게시글 상세 등)은 몫이 조금 더 크다 (sqrt)
+     - 시간이 충분하면 결국 전부 방문한다. 시간이 모자랄 때 다양한 유형을 먼저 본다."""
+    def __init__(self):
+        self.buckets: Dict[str, deque] = {}
+        self.taken: Dict[str, int] = {}
+        self.seen: Dict[str, int] = {}
+
+    def append(self, item: Tuple[str, str]) -> None:
+        t = url_template(item[0])
+        if t not in self.buckets:
+            self.buckets[t] = deque()
+            self.taken[t] = 0
+            self.seen[t] = 0
+        self.buckets[t].append(item)
+        self.seen[t] += 1
+
+    def popleft(self) -> Tuple[str, str]:
+        best, best_score = None, None
+        for t, q in self.buckets.items():
+            if not q:
+                continue
+            score = (self.taken[t] + 1) / math.sqrt(self.seen[t])
+            if best is None or score < best_score:
+                best, best_score = t, score
+        if best is None:
+            raise IndexError("empty")
+        self.taken[best] += 1
+        return self.buckets[best].popleft()
+
+    def __len__(self) -> int:
+        return sum(len(q) for q in self.buckets.values())
+
+
 class WebCrawler:
     """
     공공 웹사이트 크롤링 및 DOM/CSS 정보 수집 모듈
     (스킴 분리, 중복 방지 키 적용, 고유 선택자, DOM src 기반 중첩 iframe 체인 지원)
     """
-    def __init__(self, entry_url: str, max_pages: int = 30, total_timeout_sec: float = 1200.0):
+    def __init__(self, entry_url: str, max_pages: int = 30, total_timeout_sec: float = 1200.0, workers: int = 4):
         self.entry_url = entry_url.strip()
         self.parsed_entry = urlparse(self.entry_url)
         self.domain = self.parsed_entry.netloc
         self.max_pages = max_pages            
-        self.total_timeout_sec = total_timeout_sec  
+        self.total_timeout_sec = total_timeout_sec
+        self.workers = max(1, workers)
         self.visited_keys: Set[str] = set()
 
     async def fetch_page_data(self) -> Dict[str, Any]:
-        print(f"[*] 웹 크롤링 시작 (진입점: {self.entry_url}, 도메인: {self.domain})")
+        """여러 탭(workers)이 같은 큐에서 동시에 페이지를 가져간다. 결과는 방문 순서대로 정렬해 돌려준다."""
+        print(f"[*] 웹 크롤링 시작 (진입점: {self.entry_url}, 도메인: {self.domain}, 동시 탭: {self.workers})")
         start_time = time.time()
-        
-        all_elements_data: List[Dict[str, Any]] = []
-        
+
         entry_normalized = self._normalize_url(self.entry_url)
         entry_key = self._get_dedup_key(entry_normalized)
-        
-        urls_to_visit = deque([(entry_normalized, entry_key)])
+
+        urls_to_visit = FairQueue()
+        urls_to_visit.append((entry_normalized, entry_key))
         queued_keys: Set[str] = {entry_key}
+        in_progress: Set[str] = set()
+        page_results: List[Tuple[int, List[Dict[str, Any]]]] = []   # (방문 순번, 요소들)
+        state = {"claimed": 0, "busy": 0}
+        timing = {"goto": 0.0, "extract": 0.0, "links": 0.0}       # 탭별 시간의 합(누적)
 
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context()
-            page = await context.new_page()
 
-            while urls_to_visit and len(self.visited_keys) < self.max_pages:
-                elapsed_time = time.time() - start_time
-                if elapsed_time > self.total_timeout_sec:
-                    print(f"[!] 타임아웃 상한선({self.total_timeout_sec}초) 도달로 크롤링을 종료합니다.")
-                    break
+            # 이미지/영상/폰트는 텍스트 탐지에 필요 없으므로 받지 않는다 (속도)
+            async def _block_heavy(route):
+                if route.request.resource_type in ("image", "media", "font"):
+                    await route.abort()
+                else:
+                    await route.continue_()
+            await context.route("**/*", _block_heavy)
 
-                target_url, dedup_key = urls_to_visit.popleft()
-
-                if dedup_key in self.visited_keys:
-                    continue
-
-                print(f"[{len(self.visited_keys)+1}/{self.max_pages}] 크롤링 중: {target_url}")
-
+            async def worker(wid: int):
+                page = await context.new_page()
                 try:
-                    response = await page.goto(
-                        target_url,
-                        wait_until="domcontentloaded",
-                        timeout=15000
-                    )
-                    await asyncio.sleep(1.5)
-                except Exception as e:
-                    print(f"[!] 페이지 접속 실패 ({target_url}): {e}")
-                    continue
+                    while True:
+                        if time.time() - start_time > self.total_timeout_sec:
+                            return
+                        if len(self.visited_keys) + state["busy"] >= self.max_pages:
+                            return
+                        try:
+                            target_url, dedup_key = urls_to_visit.popleft()
+                        except IndexError:
+                            if state["busy"] == 0:
+                                return                      # 큐도 비었고 일하는 탭도 없음 -> 끝
+                            await asyncio.sleep(0.1)        # 다른 탭이 새 링크를 넣을 수 있으니 잠깐 대기
+                            continue
+                        if dedup_key in self.visited_keys or dedup_key in in_progress:
+                            continue
 
-                # 4xx/5xx 에러 페이지는 건너뜀 (continue 는 if 안쪽에 있어야 함)
-                if response is not None and response.status >= 400:
-                    print(f"[!] HTTP {response.status}: {target_url}")
-                    continue
+                        in_progress.add(dedup_key)
+                        state["busy"] += 1
+                        state["claimed"] += 1
+                        order = state["claimed"]
+                        print(f"[{order}/{self.max_pages}] 크롤링 중: {target_url}")
+                        try:
+                            await self._crawl_one(page, target_url, dedup_key, order, page_results,
+                                                  urls_to_visit, queued_keys, timing)
+                        except Exception as e:
+                            print(f"[!] 페이지 처리 실패 ({target_url}): {type(e).__name__}: {e}")
+                        finally:
+                            state["busy"] -= 1
+                            in_progress.discard(dedup_key)
+                finally:
+                    await page.close()
 
-                self.visited_keys.add(dedup_key)
-
-                # 1. 메인 프레임 및 모든 iframe 순회 수집
-                for frame in page.frames:
-                    is_iframe = (frame != page.main_frame)
-                    iframe_chain = await self._build_iframe_chain(frame) if is_iframe else ""
-                    
-                    frame_elements = await self._extract_elements_from_frame(
-                        frame, is_iframe=is_iframe, iframe_chain=iframe_chain, page_url=target_url
-                    )
-                    all_elements_data.extend(frame_elements)
-
-                # 2. 동일 도메인 하위 링크 수집
-                sub_links = await self._extract_same_domain_links(page)
-                for link in sub_links:
-                    norm_link = self._normalize_url(link)
-                    link_key = self._get_dedup_key(norm_link)
-                    
-                    if norm_link and link_key not in self.visited_keys and link_key not in queued_keys:
-                        queued_keys.add(link_key)
-                        urls_to_visit.append((norm_link, link_key))
-
+            await asyncio.gather(*(worker(i) for i in range(self.workers)))
             await browser.close()
-            total_elapsed = time.time() - start_time
-            print(f"[+] 총 {len(self.visited_keys)}개 페이지 탐색, {len(all_elements_data)}개 요소 수집 완료")
 
-            return {
-                "entry_url": self.entry_url,
-                "visited_pages_count": len(self.visited_keys),
-                "crawl_elapsed_sec": total_elapsed,
-                "elements": all_elements_data
-            }
+        total_elapsed = time.time() - start_time
+        page_results.sort(key=lambda t: t[0])
+        all_elements_data = [e for _, els in page_results for e in els]
+        print(f"[+] 총 {len(self.visited_keys)}개 페이지 탐색, {len(all_elements_data)}개 요소 수집 완료")
+        print(f"[시간] (탭 누적) 접속+대기 {timing['goto']:.1f}초 / 요소 추출 {timing['extract']:.1f}초 / "
+              f"링크 수집 {timing['links']:.1f}초 | 실제 경과 {total_elapsed:.1f}초")
+        return {
+            "entry_url": self.entry_url,
+            "visited_pages_count": len(self.visited_keys),
+            "crawl_elapsed_sec": total_elapsed,
+            "elements": all_elements_data,
+        }
+
+    async def _crawl_one(self, page: Page, target_url: str, dedup_key: str, order: int,
+                         page_results, urls_to_visit, queued_keys, timing) -> None:
+        t0 = time.time()
+        try:
+            response = await page.goto(target_url, wait_until="domcontentloaded", timeout=15000)
+        except Exception as e:
+            print(f"[!] 페이지 접속 실패 ({target_url}): {e}")
+            return
+        t1 = time.time()
+        # 동적으로 붙는 내용(댓글 등)을 위해 네트워크가 잠잠해질 때까지 최대 2초, 그 뒤 잠깐 더
+        try:
+            await page.wait_for_load_state("networkidle", timeout=2000)
+        except Exception:
+            pass
+        await asyncio.sleep(0.3)
+        timing["goto"] += time.time() - t0
+
+        if response is not None and response.status >= 400:
+            print(f"[!] HTTP {response.status}: {target_url}")
+            return
+        self.visited_keys.add(dedup_key)
+
+        t0 = time.time()
+        elements: List[Dict[str, Any]] = []
+        for frame in page.frames:
+            is_iframe = (frame != page.main_frame)
+            iframe_chain = await self._build_iframe_chain(frame) if is_iframe else ""
+            elements.extend(await self._extract_elements_from_frame(
+                frame, is_iframe=is_iframe, iframe_chain=iframe_chain, page_url=target_url))
+        page_results.append((order, elements))
+        timing["extract"] += time.time() - t0
+
+        t0 = time.time()
+        for link in await self._extract_same_domain_links(page):
+            norm_link = self._normalize_url(link)
+            link_key = self._get_dedup_key(norm_link)
+            if norm_link and link_key not in self.visited_keys and link_key not in queued_keys:
+                queued_keys.add(link_key)
+                urls_to_visit.append((norm_link, link_key))
+        timing["links"] += time.time() - t0
 
     async def _build_iframe_chain(self, frame: Frame) -> str:
         """
@@ -236,6 +329,9 @@ class WebCrawler:
                 }
                 
                 const trimmedDirectText = directText.trim();
+                // 자기 글자가 없고 안쪽 글자가 300자를 넘는 큰 컨테이너는 건너뛴다.
+                // (자식들이 따로 수집되므로 중복이고, innerText 계산이 느리다)
+                if (!trimmedDirectText && (el.textContent || '').length > 300) return;
                 const fullInnerText = (el.innerText || '').trim();
                 
                 if (trimmedDirectText.length > 0 || fullInnerText.length > 0) {

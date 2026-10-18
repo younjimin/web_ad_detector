@@ -54,5 +54,40 @@
     "evidence_text": "홀덤 포커 머니 충전 텔레그램",
     "technique": "TRANSPARENT",
     "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view2.html?id=2&page=1",
+    "location": "html > body > span.off-left",
+    "evidence_text": "바카라 필승 전략 텔레그램 문의",
+    "technique": "OFFSCREEN",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view2.html?id=2&page=1",
+    "location": "html > body > span.fs0",
+    "evidence_text": "성인 만남 채팅 바로가기",
+    "technique": "OFFSCREEN",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view2.html?id=2&page=1",
+    "location": "html > body > span.fs1",
+    "evidence_text": "불법 대출 당일 승인",
+    "technique": "OFFSCREEN",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view2.html?id=2&page=1",
+    "location": "html > body > div.hidden-box > span.dn",
+    "evidence_text": "카지노 무료 쿠폰 지급",
+    "technique": "OFFSCREEN",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view2.html?id=2&page=1",
+    "location": "iframe[src=\"http://localhost:8000/widget.html\"] >>> html > body > div.wrap > span.hidden-link",
+    "evidence_text": "무료 슬롯 체험 바로가기",
+    "technique": "OFFSCREEN",
+    "is_violation": true
   }
 ]
