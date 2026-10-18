@@ -26,5 +26,33 @@
     "evidence_text": "ㄷㅗㅂㅏㄱ",
     "technique": "JAMO",
     "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view1.html",
+    "location": "html > body > div.area > span.t-transparent",
+    "evidence_text": "먹튀검증 안전놀이터 상담 텔레그램 @promo_777",
+    "technique": "TRANSPARENT",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view1.html",
+    "location": "html > body > div.area > span.t-opacity",
+    "evidence_text": "무료 슬롯 체험 바로가기",
+    "technique": "TRANSPARENT",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view1.html",
+    "location": "html > body > div.box > span.same-color",
+    "evidence_text": "토토 사이트 추천 가입 즉시 지급",
+    "technique": "TRANSPARENT",
+    "is_violation": true
+  },
+  {
+    "url": "http://localhost:8000/view2.html?id=2&page=1",
+    "location": "iframe[src=\"http://localhost:8000/widget.html\"] >>> iframe[src=\"http://localhost:8000/nested.html\"] >>> html > body > span.deep",
+    "evidence_text": "홀덤 포커 머니 충전 텔레그램",
+    "technique": "TRANSPARENT",
+    "is_violation": true
   }
 ]

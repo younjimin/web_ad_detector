@@ -1,13 +1,15 @@
 {
   "entry_url": "http://localhost:8000/index.html",
-  "visited_pages_count": 5,
-  "crawl_elapsed_sec": 10.602635622024536,
+  "visited_pages_count": 4,
+  "crawl_elapsed_sec": 16.291714906692505,
   "elements": [
     {
       "text": "테스트 기관 홈페이지",
       "direct_text": "테스트 기관 홈페이지",
       "full_text": "테스트 기관 홈페이지",
       "location": "html > body > h1",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -17,13 +19,23 @@
         "fontSize": "32px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 43,
         "top": 21.4375,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 64.4375
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -32,6 +44,8 @@
       "direct_text": "정상 안내문입니다. 민원 접수는 평일 9시부터 18시까지입니다.",
       "full_text": "정상 안내문입니다. 민원 접수는 평일 9시부터 18시까지입니다.",
       "location": "html > body > p",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -41,13 +55,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 85.875,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 106.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -56,6 +80,8 @@
       "direct_text": "",
       "full_text": "게시판",
       "location": "html > body > ul.menu > li.item:nth-of-type(1)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -65,13 +91,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 122.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 143.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -80,6 +116,8 @@
       "direct_text": "게시판",
       "full_text": "게시판",
       "location": "html > body > ul.menu > li.item:nth-of-type(1) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -89,13 +127,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 48,
         "height": 21,
         "top": 122.875,
-        "left": 48
+        "left": 48,
+        "right": 96,
+        "bottom": 143.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -104,6 +152,8 @@
       "direct_text": "",
       "full_text": "공지 1",
       "location": "html > body > ul.menu > li.item:nth-of-type(2)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -113,13 +163,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 143.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 164.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -128,6 +188,8 @@
       "direct_text": "공지 1",
       "full_text": "공지 1",
       "location": "html > body > ul.menu > li.item:nth-of-type(2) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -137,13 +199,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 46.4375,
         "height": 21,
         "top": 143.875,
-        "left": 48
+        "left": 48,
+        "right": 94.4375,
+        "bottom": 164.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -152,6 +224,8 @@
       "direct_text": "",
       "full_text": "공지 2",
       "location": "html > body > ul.menu > li.item:nth-of-type(3)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -161,13 +235,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 164.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 185.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -176,6 +260,8 @@
       "direct_text": "공지 2",
       "full_text": "공지 2",
       "location": "html > body > ul.menu > li.item:nth-of-type(3) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -185,13 +271,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 46.4375,
         "height": 21,
         "top": 164.875,
-        "left": 48
+        "left": 48,
+        "right": 94.4375,
+        "bottom": 185.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -200,6 +296,8 @@
       "direct_text": "",
       "full_text": "공지 2 (쿼리 순서만 다름)",
       "location": "html > body > ul.menu > li.item:nth-of-type(4)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -209,13 +307,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 185.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 206.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -224,6 +332,8 @@
       "direct_text": "공지 2 (쿼리 순서만 다름)",
       "full_text": "공지 2 (쿼리 순서만 다름)",
       "location": "html > body > ul.menu > li.item:nth-of-type(4) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -233,13 +343,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 185.0625,
         "height": 21,
         "top": 185.875,
-        "left": 48
+        "left": 48,
+        "right": 233.0625,
+        "bottom": 206.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -248,6 +368,8 @@
       "direct_text": "",
       "full_text": "게시판 (앵커)",
       "location": "html > body > ul.menu > li.item:nth-of-type(5)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -257,13 +379,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 206.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 227.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -272,6 +404,8 @@
       "direct_text": "게시판 (앵커)",
       "full_text": "게시판 (앵커)",
       "location": "html > body > ul.menu > li.item:nth-of-type(5) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -281,13 +415,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 95.375,
         "height": 21,
         "top": 206.875,
-        "left": 48
+        "left": 48,
+        "right": 143.375,
+        "bottom": 227.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -296,6 +440,8 @@
       "direct_text": "",
       "full_text": "없는 페이지(404)",
       "location": "html > body > ul.menu > li.item:nth-of-type(6)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -305,13 +451,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 227.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 248.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -320,6 +476,8 @@
       "direct_text": "없는 페이지(404)",
       "full_text": "없는 페이지(404)",
       "location": "html > body > ul.menu > li.item:nth-of-type(6) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -329,13 +487,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 121.8125,
         "height": 21,
         "top": 227.875,
-        "left": 48
+        "left": 48,
+        "right": 169.8125,
+        "bottom": 248.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -344,6 +512,8 @@
       "direct_text": "",
       "full_text": "외부 링크",
       "location": "html > body > ul.menu > li.item:nth-of-type(7)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -353,13 +523,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 248.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 269.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -368,6 +548,8 @@
       "direct_text": "외부 링크",
       "full_text": "외부 링크",
       "location": "html > body > ul.menu > li.item:nth-of-type(7) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -377,13 +559,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 69.625,
         "height": 21,
         "top": 248.875,
-        "left": 48
+        "left": 48,
+        "right": 117.625,
+        "bottom": 269.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -392,6 +584,8 @@
       "direct_text": "",
       "full_text": "메일",
       "location": "html > body > ul.menu > li.item:nth-of-type(8)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -401,13 +595,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1224,
         "height": 21,
         "top": 269.875,
-        "left": 48
+        "left": 48,
+        "right": 1272,
+        "bottom": 290.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -416,6 +620,8 @@
       "direct_text": "메일",
       "full_text": "메일",
       "location": "html > body > ul.menu > li.item:nth-of-type(8) > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -425,13 +631,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 32,
         "height": 21,
         "top": 269.875,
-        "left": 48
+        "left": 48,
+        "right": 80,
+        "bottom": 290.875
       },
       "url": "http://localhost:8000/index.html"
     },
@@ -440,6 +656,8 @@
       "direct_text": "게시판",
       "full_text": "게시판",
       "location": "html > body > h2",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -449,13 +667,23 @@
         "fontSize": "24px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 32,
         "top": 19.90625,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 51.90625
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -464,6 +692,8 @@
       "direct_text": "",
       "full_text": "2026년 하반기 사업 안내",
       "location": "html > body > table.board-list > tbody > tr:nth-of-type(1) > td.title",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -473,13 +703,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 244.5,
         "height": 23,
         "top": 73.8125,
-        "left": 10
+        "left": 10,
+        "right": 254.5,
+        "bottom": 96.8125
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -488,6 +728,8 @@
       "direct_text": "2026년 하반기 사업 안내",
       "full_text": "2026년 하반기 사업 안내",
       "location": "html > body > table.board-list > tbody > tr:nth-of-type(1) > td.title > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -497,13 +739,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 180.125,
         "height": 21,
         "top": 74.8125,
-        "left": 11
+        "left": 11,
+        "right": 191.125,
+        "bottom": 95.8125
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -512,6 +764,8 @@
       "direct_text": "",
       "full_text": "ｍｅｇａ－ＢＥＴ 첫충 30％ 지급",
       "location": "html > body > table.board-list > tbody > tr:nth-of-type(2) > td.title",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -521,13 +775,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 244.5,
         "height": 23,
         "top": 98.8125,
-        "left": 10
+        "left": 10,
+        "right": 254.5,
+        "bottom": 121.8125
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -536,6 +800,8 @@
       "direct_text": "ｍｅｇａ－ＢＥＴ 첫충 30％ 지급",
       "full_text": "ｍｅｇａ－ＢＥＴ 첫충 30％ 지급",
       "location": "html > body > table.board-list > tbody > tr:nth-of-type(2) > td.title > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -545,13 +811,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 242.5,
         "height": 21,
         "top": 99.8125,
-        "left": 11
+        "left": 11,
+        "right": 253.5,
+        "bottom": 120.8125
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -560,6 +836,8 @@
       "direct_text": "",
       "full_text": "시설 이용 안내",
       "location": "html > body > table.board-list > tbody > tr:nth-of-type(3) > td.title",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -569,13 +847,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 244.5,
         "height": 23,
         "top": 123.8125,
-        "left": 10
+        "left": 10,
+        "right": 254.5,
+        "bottom": 146.8125
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -584,6 +872,8 @@
       "direct_text": "시설 이용 안내",
       "full_text": "시설 이용 안내",
       "location": "html > body > table.board-list > tbody > tr:nth-of-type(3) > td.title > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -593,13 +883,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 107.25,
         "height": 21,
         "top": 124.8125,
-        "left": 11
+        "left": 11,
+        "right": 118.25,
+        "bottom": 145.8125
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -608,6 +908,8 @@
       "direct_text": "홈으로",
       "full_text": "홈으로",
       "location": "html > body > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -617,13 +919,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 48,
         "height": 21,
         "top": 148.8125,
-        "left": 8
+        "left": 8,
+        "right": 56,
+        "bottom": 169.8125
       },
       "url": "http://localhost:8000/board.html"
     },
@@ -632,6 +944,8 @@
       "direct_text": "공지 1",
       "full_text": "공지 1",
       "location": "html > body > h2",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -641,13 +955,23 @@
         "fontSize": "24px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 32,
         "top": 19.90625,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 51.90625
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -656,6 +980,8 @@
       "direct_text": "정상 본문입니다. 이용에 참고하시기 바랍니다.",
       "full_text": "정상 본문입니다. 이용에 참고하시기 바랍니다.",
       "location": "html > body > p.normal",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -665,13 +991,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 71.8125,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 92.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -680,6 +1016,8 @@
       "direct_text": "саsіnо 가입코드 LUCKY7",
       "full_text": "саsіnо 가입코드 LUCKY7",
       "location": "html > body > p.notice",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -689,13 +1027,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 108.8125,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 129.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -704,6 +1052,8 @@
       "direct_text": "ㅋㅏㅈㅣㄴㅗ ㅂㅗㄴㅓㅅㅡ 코드 LUCKY7",
       "full_text": "ㅋㅏㅈㅣㄴㅗ ㅂㅗㄴㅓㅅㅡ 코드 LUCKY7",
       "location": "html > body > p.desc",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -713,13 +1063,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 145.8125,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 166.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -728,6 +1088,8 @@
       "direct_text": "",
       "full_text": "ㄷㅗㅂㅏㄱ",
       "location": "html > body > p.split",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -737,13 +1099,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 182.8125,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 203.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -752,6 +1124,8 @@
       "direct_text": "ㄷ",
       "full_text": "ㄷ",
       "location": "html > body > p.split > span:nth-of-type(1)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -761,13 +1135,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 16,
         "height": 21,
         "top": 182.8125,
-        "left": 8
+        "left": 8,
+        "right": 24,
+        "bottom": 203.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -776,6 +1160,8 @@
       "direct_text": "ㅗ",
       "full_text": "ㅗ",
       "location": "html > body > p.split > span:nth-of-type(2)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -785,13 +1171,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 16,
         "height": 21,
         "top": 182.8125,
-        "left": 24
+        "left": 24,
+        "right": 40,
+        "bottom": 203.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -800,6 +1196,8 @@
       "direct_text": "ㅂ",
       "full_text": "ㅂ",
       "location": "html > body > p.split > span:nth-of-type(3)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -809,13 +1207,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 16,
         "height": 21,
         "top": 182.8125,
-        "left": 40
+        "left": 40,
+        "right": 56,
+        "bottom": 203.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -824,6 +1232,8 @@
       "direct_text": "ㅏ",
       "full_text": "ㅏ",
       "location": "html > body > p.split > span:nth-of-type(4)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -833,13 +1243,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 16,
         "height": 21,
         "top": 182.8125,
-        "left": 56
+        "left": 56,
+        "right": 72,
+        "bottom": 203.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -848,6 +1268,8 @@
       "direct_text": "ㄱ",
       "full_text": "ㄱ",
       "location": "html > body > p.split > span:nth-of-type(5)",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -857,13 +1279,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 16,
         "height": 21,
         "top": 182.8125,
-        "left": 72
+        "left": 72,
+        "right": 88,
+        "bottom": 203.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -872,6 +1304,8 @@
       "direct_text": "",
       "full_text": "먹튀검증 안전놀이터 상담 텔레그램 @promo_777 무료 슬롯 체험 바로가기",
       "location": "html > body > div.area",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -881,13 +1315,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 219.8125,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 240.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -896,6 +1340,8 @@
       "direct_text": "먹튀검증 안전놀이터 상담 텔레그램 @promo_777",
       "full_text": "먹튀검증 안전놀이터 상담 텔레그램 @promo_777",
       "location": "html > body > div.area > span.t-transparent",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgba(0, 0, 0, 0)",
@@ -905,13 +1351,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 359.71875,
         "height": 21,
         "top": 219.8125,
-        "left": 8
+        "left": 8,
+        "right": 367.71875,
+        "bottom": 240.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -920,6 +1376,8 @@
       "direct_text": "무료 슬롯 체험 바로가기",
       "full_text": "무료 슬롯 체험 바로가기",
       "location": "html > body > div.area > span.t-opacity",
+      "eff_opacity": 0,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "0",
         "color": "rgb(0, 0, 0)",
@@ -929,13 +1387,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 176.875,
         "height": 21,
         "top": 219.8125,
-        "left": 373.34375
+        "left": 373.34375,
+        "right": 550.21875,
+        "bottom": 240.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -944,6 +1412,8 @@
       "direct_text": "",
       "full_text": "토토 사이트 추천 가입 즉시 지급",
       "location": "html > body > div.box",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -953,13 +1423,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 240.8125,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 261.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -968,6 +1448,8 @@
       "direct_text": "토토 사이트 추천 가입 즉시 지급",
       "full_text": "토토 사이트 추천 가입 즉시 지급",
       "location": "html > body > div.box > span.same-color",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(255, 255, 255)",
@@ -977,13 +1459,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 236.125,
         "height": 21,
         "top": 240.8125,
-        "left": 8
+        "left": 8,
+        "right": 244.125,
+        "bottom": 261.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -992,6 +1484,8 @@
       "direct_text": "홈으로",
       "full_text": "홈으로",
       "location": "html > body > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -1001,13 +1495,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 48,
         "height": 21,
         "top": 261.8125,
-        "left": 8
+        "left": 8,
+        "right": 56,
+        "bottom": 282.8125
       },
       "url": "http://localhost:8000/view1.html"
     },
@@ -1016,6 +1520,8 @@
       "direct_text": "본문 바로가기",
       "full_text": "본문 바로가기",
       "location": "html > body > a.skip-nav",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -1025,13 +1531,23 @@
         "fontSize": "16px",
         "position": "absolute",
         "left": "-9999px",
-        "top": "19.9062px"
+        "top": "19.9062px",
+        "right": "11177.4px",
+        "bottom": "679.094px",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 101.625,
         "height": 21,
         "top": 19.90625,
-        "left": -9999
+        "left": -9999,
+        "right": -9897.375,
+        "bottom": 40.90625
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1040,6 +1556,8 @@
       "direct_text": "공지 2",
       "full_text": "공지 2",
       "location": "html > body > h2",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1049,13 +1567,23 @@
         "fontSize": "24px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 32,
         "top": 19.90625,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 51.90625
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1064,6 +1592,8 @@
       "direct_text": "시설 이용 시간은 09:00~18:00 입니다.",
       "full_text": "시설 이용 시간은 09:00~18:00 입니다.",
       "location": "html > body > p.normal",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1073,13 +1603,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 1264,
         "height": 21,
         "top": 71.8125,
-        "left": 8
+        "left": 8,
+        "right": 1272,
+        "bottom": 92.8125
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1088,6 +1628,8 @@
       "direct_text": "바카라 필승 전략 텔레그램 문의",
       "full_text": "바카라 필승 전략 텔레그램 문의",
       "location": "html > body > span.off-left",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1097,13 +1639,23 @@
         "fontSize": "16px",
         "position": "absolute",
         "left": "-9999px",
-        "top": "108.812px"
+        "top": "108.812px",
+        "right": "11048.5px",
+        "bottom": "590.188px",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 230.5,
         "height": 21,
         "top": 108.8125,
-        "left": -9999
+        "left": -9999,
+        "right": -9768.5,
+        "bottom": 129.8125
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1112,6 +1664,8 @@
       "direct_text": "성인 만남 채팅 바로가기",
       "full_text": "성인 만남 채팅 바로가기",
       "location": "html > body > span.fs0",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1121,13 +1675,23 @@
         "fontSize": "0px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 0,
         "height": 0,
         "top": 212.8125,
-        "left": 8
+        "left": 8,
+        "right": 8,
+        "bottom": 212.8125
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1136,6 +1700,8 @@
       "direct_text": "불법 대출 당일 승인",
       "full_text": "불법 대출 당일 승인",
       "location": "html > body > span.fs1",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1145,13 +1711,23 @@
         "fontSize": "1px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 9.0625,
         "height": 1,
         "top": 211.8125,
-        "left": 13.625
+        "left": 13.625,
+        "right": 22.6875,
+        "bottom": 212.8125
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1160,6 +1736,8 @@
       "direct_text": "",
       "full_text": "카지노 무료 쿠폰 지급",
       "location": "html > body > div.hidden-box",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1169,13 +1747,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 0,
         "height": 0,
         "top": 0,
-        "left": 0
+        "left": 0,
+        "right": 0,
+        "bottom": 0
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1184,6 +1772,8 @@
       "direct_text": "카지노 무료 쿠폰 지급",
       "full_text": "카지노 무료 쿠폰 지급",
       "location": "html > body > div.hidden-box > span.dn",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1193,13 +1783,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 0,
         "height": 0,
         "top": 0,
-        "left": 0
+        "left": 0,
+        "right": 0,
+        "bottom": 0
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1208,6 +1808,8 @@
       "direct_text": "홈으로",
       "full_text": "홈으로",
       "location": "html > body > a",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 238)",
@@ -1217,13 +1819,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 48,
         "height": 21,
         "top": 195.8125,
-        "left": 337.9375
+        "left": 337.9375,
+        "right": 385.9375,
+        "bottom": 216.8125
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1232,6 +1844,8 @@
       "direct_text": "",
       "full_text": "위젯 안내: 오늘의 공지\n\n무료 슬롯 체험 바로가기",
       "location": "iframe[src=\"http://localhost:8000/widget.html\"] >>> html > body > div.wrap",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1241,13 +1855,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 284,
         "height": 21,
         "top": 16,
-        "left": 8
+        "left": 8,
+        "right": 292,
+        "bottom": 37
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1256,6 +1880,8 @@
       "direct_text": "위젯 안내: 오늘의 공지",
       "full_text": "위젯 안내: 오늘의 공지",
       "location": "iframe[src=\"http://localhost:8000/widget.html\"] >>> html > body > div.wrap > p.ok",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1265,13 +1891,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 284,
         "height": 21,
         "top": 16,
-        "left": 8
+        "left": 8,
+        "right": 292,
+        "bottom": 37
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1280,6 +1916,8 @@
       "direct_text": "무료 슬롯 체험 바로가기",
       "full_text": "무료 슬롯 체험 바로가기",
       "location": "iframe[src=\"http://localhost:8000/widget.html\"] >>> html > body > div.wrap > span.hidden-link",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1289,13 +1927,23 @@
         "fontSize": "16px",
         "position": "absolute",
         "left": "-9999px",
-        "top": "53px"
+        "top": "53px",
+        "right": "10122.1px",
+        "bottom": "26px",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 176.875,
         "height": 21,
         "top": 53,
-        "left": -9999
+        "left": -9999,
+        "right": -9822.125,
+        "bottom": 74
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1304,6 +1952,8 @@
       "direct_text": "중첩 프레임 정상 문구",
       "full_text": "중첩 프레임 정상 문구",
       "location": "iframe[src=\"http://localhost:8000/widget.html\"] >>> iframe[src=\"http://localhost:8000/nested.html\"] >>> html > body > p.ok",
+      "eff_opacity": 1,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "1",
         "color": "rgb(0, 0, 0)",
@@ -1313,13 +1963,23 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 184,
         "height": 21,
         "top": 16,
-        "left": 8
+        "left": 8,
+        "right": 192,
+        "bottom": 37
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
     },
@@ -1328,6 +1988,8 @@
       "direct_text": "홀덤 포커 머니 충전 텔레그램",
       "full_text": "홀덤 포커 머니 충전 텔레그램",
       "location": "iframe[src=\"http://localhost:8000/widget.html\"] >>> iframe[src=\"http://localhost:8000/nested.html\"] >>> html > body > span.deep",
+      "eff_opacity": 0,
+      "eff_bg": "rgb(255, 255, 255)",
       "style": {
         "opacity": "0",
         "color": "rgb(0, 0, 0)",
@@ -1337,111 +1999,25 @@
         "fontSize": "16px",
         "position": "static",
         "left": "auto",
-        "top": "auto"
+        "top": "auto",
+        "right": "auto",
+        "bottom": "auto",
+        "transform": "none",
+        "textIndent": "0px",
+        "overflow": "visible",
+        "clip": "auto",
+        "clipPath": "none",
+        "zIndex": "auto"
       },
       "rect": {
         "width": 182.5,
         "height": 42,
         "top": 53,
-        "left": 8
+        "left": 8,
+        "right": 190.5,
+        "bottom": 95
       },
       "url": "http://localhost:8000/view2.html?id=2&page=1"
-    },
-    {
-      "text": "Error response",
-      "direct_text": "Error response",
-      "full_text": "Error response",
-      "location": "html > body > h1",
-      "style": {
-        "opacity": "1",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "display": "block",
-        "visibility": "visible",
-        "fontSize": "32px",
-        "position": "static",
-        "left": "auto",
-        "top": "auto"
-      },
-      "rect": {
-        "width": 1264,
-        "height": 37,
-        "top": 21.4375,
-        "left": 8
-      },
-      "url": "http://localhost:8000/missing.html"
-    },
-    {
-      "text": "Error code: 404",
-      "direct_text": "Error code: 404",
-      "full_text": "Error code: 404",
-      "location": "html > body > p:nth-of-type(1)",
-      "style": {
-        "opacity": "1",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "display": "block",
-        "visibility": "visible",
-        "fontSize": "16px",
-        "position": "static",
-        "left": "auto",
-        "top": "auto"
-      },
-      "rect": {
-        "width": 1264,
-        "height": 18,
-        "top": 79.875,
-        "left": 8
-      },
-      "url": "http://localhost:8000/missing.html"
-    },
-    {
-      "text": "Message: File not found.",
-      "direct_text": "Message: File not found.",
-      "full_text": "Message: File not found.",
-      "location": "html > body > p:nth-of-type(2)",
-      "style": {
-        "opacity": "1",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "display": "block",
-        "visibility": "visible",
-        "fontSize": "16px",
-        "position": "static",
-        "left": "auto",
-        "top": "auto"
-      },
-      "rect": {
-        "width": 1264,
-        "height": 18,
-        "top": 113.875,
-        "left": 8
-      },
-      "url": "http://localhost:8000/missing.html"
-    },
-    {
-      "text": "Error code explanation: 404 - Nothing matches the given URI.",
-      "direct_text": "Error code explanation: 404 - Nothing matches the given URI.",
-      "full_text": "Error code explanation: 404 - Nothing matches the given URI.",
-      "location": "html > body > p:nth-of-type(3)",
-      "style": {
-        "opacity": "1",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "display": "block",
-        "visibility": "visible",
-        "fontSize": "16px",
-        "position": "static",
-        "left": "auto",
-        "top": "auto"
-      },
-      "rect": {
-        "width": 1264,
-        "height": 18,
-        "top": 147.875,
-        "left": 8
-      },
-      "url": "http://localhost:8000/missing.html"
     }
   ]
 }

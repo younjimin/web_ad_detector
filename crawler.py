@@ -2,6 +2,7 @@
 
 import asyncio
 import time
+from collections import deque
 from urllib.parse import urlparse, urljoin, parse_qsl, urlencode
 from typing import List, Dict, Any, Set, Optional, Tuple
 from playwright.async_api import async_playwright, Page, Frame
@@ -28,7 +29,7 @@ class WebCrawler:
         entry_normalized = self._normalize_url(self.entry_url)
         entry_key = self._get_dedup_key(entry_normalized)
         
-        urls_to_visit: List[Tuple[str, str]] = [(entry_normalized, entry_key)]
+        urls_to_visit = deque([(entry_normalized, entry_key)])
         queued_keys: Set[str] = {entry_key}
 
         async with async_playwright() as p:
@@ -42,20 +43,30 @@ class WebCrawler:
                     print(f"[!] 타임아웃 상한선({self.total_timeout_sec}초) 도달로 크롤링을 종료합니다.")
                     break
 
-                target_url, dedup_key = urls_to_visit.pop(0)
-                
+                target_url, dedup_key = urls_to_visit.popleft()
+
                 if dedup_key in self.visited_keys:
                     continue
 
-                self.visited_keys.add(dedup_key)
-                print(f"[{len(self.visited_keys)}/{self.max_pages}] 크롤링 중: {target_url}")
+                print(f"[{len(self.visited_keys)+1}/{self.max_pages}] 크롤링 중: {target_url}")
 
                 try:
-                    response = await page.goto(target_url, wait_until="domcontentloaded", timeout=15000)
+                    response = await page.goto(
+                        target_url,
+                        wait_until="domcontentloaded",
+                        timeout=15000
+                    )
                     await asyncio.sleep(1.5)
                 except Exception as e:
                     print(f"[!] 페이지 접속 실패 ({target_url}): {e}")
                     continue
+
+                # 4xx/5xx 에러 페이지는 건너뜀 (continue 는 if 안쪽에 있어야 함)
+                if response is not None and response.status >= 400:
+                    print(f"[!] HTTP {response.status}: {target_url}")
+                    continue
+
+                self.visited_keys.add(dedup_key)
 
                 # 1. 메인 프레임 및 모든 iframe 순회 수집
                 for frame in page.frames:
@@ -146,6 +157,38 @@ class WebCrawler:
 
         script = """
         () => {
+            // 조상까지 올라가서 계산하는 '실제로 보이는' 값 (결과는 캐시)
+            const opacityCache = new Map();
+            const bgCache = new Map();
+
+            function colorAlpha(c) {
+                if (!c || c === 'transparent') return 0;
+                const m = c.match(/rgba?\\(([^)]+)\\)/);
+                if (!m) return 1;
+                const p = m[1].split(',').map(s => s.trim());
+                return p.length >= 4 ? parseFloat(p[3]) : 1;
+            }
+
+            // 조상 opacity 를 모두 곱한 값 (opacity 는 상속되지 않지만 자식도 같이 투명해진다)
+            function effectiveOpacity(el) {
+                if (!el || el.nodeType !== Node.ELEMENT_NODE) return 1;
+                if (opacityCache.has(el)) return opacityCache.get(el);
+                const own = parseFloat(window.getComputedStyle(el).opacity);
+                const v = (isNaN(own) ? 1 : own) * effectiveOpacity(el.parentElement);
+                opacityCache.set(el, v);
+                return v;
+            }
+
+            // 자기 자신부터 올라가며 처음 만나는 '불투명한' 배경색. 없으면 페이지 기본색(흰색)
+            function effectiveBackground(el) {
+                if (!el || el.nodeType !== Node.ELEMENT_NODE) return 'rgb(255, 255, 255)';
+                if (bgCache.has(el)) return bgCache.get(el);
+                const bg = window.getComputedStyle(el).backgroundColor;
+                const v = colorAlpha(bg) > 0.5 ? bg : effectiveBackground(el.parentElement);
+                bgCache.set(el, v);
+                return v;
+            }
+
             function getUniqueCssSelector(el) {
                 if (!(el instanceof Element)) return '';
                 let path = [];
@@ -204,22 +247,45 @@ class WebCrawler:
                         direct_text: trimmedDirectText,
                         full_text: fullInnerText,
                         location: getUniqueCssSelector(el),
+                        eff_opacity: effectiveOpacity(el),
+                        eff_bg: effectiveBackground(el),
                         style: {
                             opacity: style.opacity,
+
                             color: style.color,
                             backgroundColor: style.backgroundColor,
+
                             display: style.display,
                             visibility: style.visibility,
+
                             fontSize: style.fontSize,
+
                             position: style.position,
+
                             left: style.left,
-                            top: style.top
+                            top: style.top,
+
+                            right: style.right,
+                            bottom: style.bottom,
+
+                            transform: style.transform,
+                            textIndent: style.textIndent,
+
+                            overflow: style.overflow,
+                            clip: style.clip,
+                            clipPath: style.clipPath,
+
+                            zIndex: style.zIndex
                         },
                         rect: {
                             width: rect.width,
                             height: rect.height,
+
                             top: rect.top,
-                            left: rect.left
+                            left: rect.left,
+
+                            right: rect.right,
+                            bottom: rect.bottom
                         }
                     });
                 }
@@ -239,7 +305,8 @@ class WebCrawler:
                 
                     
             return extracted_data
-        except Exception:
+        except Exception as e:
+            print(f"[!] 프레임 수집 실패 ({frame_url}): {e}")
             return []
         
     def _normalize_url(self, url: str) -> str:
