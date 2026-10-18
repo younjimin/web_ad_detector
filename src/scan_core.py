@@ -64,6 +64,9 @@ def run_scan(url: str, *, max_pages: int = DEFAULT_MAX_PAGES, timeout: float = D
              crawl_fn: Optional[Callable] = None) -> Dict:
     """탐지를 끝까지 실행하고 파일을 만든다. 크롤링이 도중에 죽어도 빈 결과 파일은 남긴다."""
     out_dir = Path(out_dir) if out_dir else base_dir()
+    real_out = sys.stdout                       # 리다이렉트 전의 진짜 stdout
+    if log is print:                            # print 를 그대로 쓰면 리다이렉트된 stdout 으로 다시 들어가 무한 재귀가 된다
+        log = lambda s: (real_out.write(s + "\n"), real_out.flush())
     started = datetime.now().astimezone()                   # '탐지 시작' 시각
     findings: List[Dict] = []
     pages, n_elements, status, error = 0, 0, 0, None

@@ -58,7 +58,8 @@ jobs:
         run: |
           Start-Process python -ArgumentList "-m","http.server","8000" -WorkingDirectory test_site -WindowStyle Hidden
           Start-Sleep -Seconds 2
-          .\dist\PublicWebScan\PublicWebScan.exe http://localhost:8000/index.html --out smoke\result.json
+          .\dist\PublicWebScan\PublicWebScan.exe http://localhost:8000/index.html --out smoke
+          if ($LASTEXITCODE -ne 0) { throw "exe exit code $LASTEXITCODE" }
           python -c "import json; d=json.load(open('smoke/result.json',encoding='utf-8')); n=len(d['findings']); print('findings', n); assert n == 13"
 
       - name: Upload Artifact
