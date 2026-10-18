@@ -1,3 +1,42 @@
+name: build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      PYTHONUTF8: "1"          # 윈도 러너 콘솔(cp1252)에서 한글 출력이 깨지거나 에러 나는 것을 막는다
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python (x64)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          architecture: x64
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+          elseif (Test-Path src/requirements.txt) { pip install -r src/requirements.txt }
+          pip install playwright pyinstaller
+
+      - name: Run unit tests
+        shell: pwsh
+        working-directory: src
+        run: |
+          foreach ($t in Get-ChildItem test_*.py) {
+            python $t.Name
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+          Write-Host "tests finished"
+
       - name: Install Chromium into the Playwright package
         shell: pwsh
         env:
@@ -21,3 +60,9 @@
           Start-Sleep -Seconds 2
           .\dist\PublicWebScan\PublicWebScan.exe http://localhost:8000/index.html --out smoke\result.json
           python -c "import json; d=json.load(open('smoke/result.json',encoding='utf-8')); n=len(d['findings']); print('findings', n); assert n == 13"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PublicWebScan
+          path: dist/PublicWebScan

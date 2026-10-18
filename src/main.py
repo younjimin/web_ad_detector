@@ -2,9 +2,21 @@
 URL 을 생략하면 입력창으로 물어본다 (exe 더블클릭용)."""
 import argparse
 import asyncio
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
+
+# 콘솔/리다이렉트 환경의 인코딩이 한글을 못 쓰더라도 출력 때문에 프로그램이 죽지 않게 한다
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except Exception:
+        pass
+
+# exe 로 묶였을 때 Playwright 가 패키지 안에 같이 넣어 둔 Chromium 을 쓰도록 한다 (빌드 때 PLAYWRIGHT_BROWSERS_PATH=0 으로 설치)
+if getattr(sys, "frozen", False):
+    os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", "0")
 
 from pipeline import run_all_detectors
 from result_writer import DEFAULT_TOPIC, build_result, validate_result, write_result
