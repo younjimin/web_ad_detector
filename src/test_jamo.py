@@ -109,6 +109,22 @@ def test_elements_keep_own_direct_hit_even_with_flagged_child():
     locs = sorted(x["location"] for x in detect_jamo_in_elements(els))
     assert locs == ["p.a", "p.a > span.b"]
 
+def test_elements_wrapper_dropped_when_child_has_direct_hit():
+    # 래퍼의 full_text 에 자식의 자모가 그대로 들어 있다. 자식이 direct_text 로 이미 걸렸다면 래퍼는 버려야 한다
+    els = [
+        _el("u", "div.wrap", "", "ㅋㅏㅈㅣㄴㅗ"),
+        _el("u", "div.wrap > p", "ㅋㅏㅈㅣㄴㅗ"),
+    ]
+    assert [x["location"] for x in detect_jamo_in_elements(els)] == ["div.wrap > p"]
+
+def test_elements_full_text_duplicates():
+    els = [
+        _el("u", "p.split", "", "ㄷㅗㅂㅏㄱ"),
+        _el("u", "p.split", "", "ㄷㅗㅂㅏㄱ"),
+    ]
+    assert len(detect_jamo_in_elements(els)) == 1
+
+
 def test_elements_prefix_rule_is_per_url():
     els = [
         _el("u1", "div.wrap", "", "ㄷㅗㅂㅏㄱ"),

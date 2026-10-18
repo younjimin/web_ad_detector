@@ -2,35 +2,10 @@
   "meta": {
     "topic": "TOPIC",
     "entry_url": "https://www.inu.ac.kr/inu/index.do?epTicket=LOG",
-    "started_at": "2026-10-18T11:55:10+02:00",
-    "finished_at": "2026-10-18T12:25:24+02:00",
-    "elapsed_sec": 1814.52,
+    "started_at": "2026-10-18T19:10:55+02:00",
+    "finished_at": "2026-10-18T19:34:42+02:00",
+    "elapsed_sec": 1426.39,
     "tool_version": "0.1.0"
   },
-  "findings": [
-    {
-      "id": "f_001",
-      "url": "https://www.inu.ac.kr/sites/global/index.do",
-      "is_violation": true,
-      "location": "html.no-js > body._responsiveObj.main.templet_depart_C.global.vertical_type.VERTICAL.Tablet._msMain > div.wrap_contents > div > article._contentBuilder._k2__WiZaRd_general > div.multipleDiv._selDiv > div.multipleContentsDiv.clear-fix > div._obj._objWidget:nth-of-type(9) > div._fnctWrap.templet_common_rct_2 > ul > li.active > div.list > ul > li:nth-of-type(2) > a.subject > div.con > div.content > span",
-      "evidence_text": "지난 2025년 7월 11일에 중국 성도박범가특교육 대표단이 본교를 방문하여 유학생 유치 활성화와 교육 협력 강화를 위한 업무협약(MOU)을 체결하였다.이번 대표단 방문에는 성도박",
-      "technique": "OFFSCREEN"
-    },
-    {
-      "id": "f_002",
-      "url": "https://www.inu.ac.kr/global/index.do",
-      "is_violation": true,
-      "location": "html.no-js > body._responsiveObj.main.templet_depart_C.global.vertical_type.VERTICAL.Tablet._msMain > div.wrap_contents > div > article._contentBuilder._k2__WiZaRd_general > div.multipleDiv._selDiv > div.multipleContentsDiv.clear-fix > div._obj._objWidget:nth-of-type(9) > div._fnctWrap.templet_common_rct_2 > ul > li.active > div.list > ul > li:nth-of-type(2) > a.subject > div.con > div.content > span",
-      "evidence_text": "지난 2025년 7월 11일에 중국 성도박범가특교육 대표단이 본교를 방문하여 유학생 유치 활성화와 교육 협력 강화를 위한 업무협약(MOU)을 체결하였다.이번 대표단 방문에는 성도박",
-      "technique": "OFFSCREEN"
-    },
-    {
-      "id": "f_003",
-      "url": "https://www.inu.ac.kr/sites/global",
-      "is_violation": true,
-      "location": "html.no-js > body._responsiveObj.main.templet_depart_C.global.vertical_type.VERTICAL.Tablet._msMain > div.wrap_contents > div > article._contentBuilder._k2__WiZaRd_general > div.multipleDiv._selDiv > div.multipleContentsDiv.clear-fix > div._obj._objWidget:nth-of-type(9) > div._fnctWrap.templet_common_rct_2 > ul > li.active > div.list > ul > li:nth-of-type(2) > a.subject > div.con > div.content > span",
-      "evidence_text": "지난 2025년 7월 11일에 중국 성도박범가특교육 대표단이 본교를 방문하여 유학생 유치 활성화와 교육 협력 강화를 위한 업무협약(MOU)을 체결하였다.이번 대표단 방문에는 성도박",
-      "technique": "OFFSCREEN"
-    }
-  ]
+  "findings": []
 }

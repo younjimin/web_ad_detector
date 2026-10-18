@@ -60,12 +60,27 @@ DEFAULT_DICT: Dict[str, List[str]] = {
     "exceptions": [
         "성인 인증", "성인인증", "성인 교육", "성인교육", "성인 학습", "성인학습", "성인 대상", "미성년자",
         "청소년 유해", "본인 인증", "본인인증",
-        # 다른 낱말 속에 우연히 들어 있는 경우 (실제 사이트에서 확인된 오탐)
-        "성도박범가",                                  # 인명/기관명 '성도' + '박범가' -> '도박' 오탐
-        "타임슬롯", "타임 슬롯", "time slot", "timeslot",   # '슬롯' (시간대)
-        "배팅 연습", "배팅연습", "배팅 케이지", "배팅케이지", "배팅 훈련",  # 야구 batting
+        "배팅 연습", "배팅연습", "배팅 케이지", "배팅케이지", "배팅 훈련",  # 야구 batting (의미가 다른 정상 용법)
+        "time slot", "timeslot",
     ],
 }
+
+# 2글자 한글 키워드(도박·슬롯·배팅 ...)는 다른 낱말 한가운데에 우연히 들어 있는 경우가 많다 (성도박물관, 타임슬롯 ...).
+# 그래서 낱말 앞머리에 오거나, 광고에 흔히 붙는 접두어(불법도박, 온라인슬롯 ...) 뒤에 올 때만 인정한다.
+_HANGUL = re.compile(r"[가-힣]")
+SHORT_PREFIXES = ("불법", "온라인", "해외", "사설", "스포츠", "무료", "인터넷", "모바일", "라이브", "합법", "안전", "실시간",
+                  "메이저", "국내", "신규", "추천", "한국", "검증", "프리미엄", "미니", "대박", "먹튀없는", "vip")
+
+
+def _short_keyword_in(kw: str, low: str) -> bool:
+    start = low.find(kw)
+    while start != -1:
+        head = low[:start]
+        if not head or not _HANGUL.match(head[-1]) or head.endswith(SHORT_PREFIXES):
+            return True
+        start = low.find(kw, start + 1)
+    return False
+
 
 _PHONE = re.compile(r"(?<!\d)(?:0\d{1,2}[-\s.]?\d{3,4}[-\s.]?\d{4})(?!\d)")
 _HANDLE = re.compile(r"(?<![\w.])@[a-z0-9_]{4,}", re.I)
@@ -129,7 +144,10 @@ class Dictionary:
         found: List[str] = []
 
         for kw in self.strong_ko:
-            if kw in low:
+            if len(kw) <= 2 and _HANGUL.match(kw[0]):
+                if _short_keyword_in(kw, low):
+                    found.append(kw)
+            elif kw in low:
                 found.append(kw)
             elif kw in self.strong_ko_compact and _SEP.sub("", kw) in compact:
                 found.append(kw)                                  # 카 지 노 / 카.지.노 / 제로폭 문자

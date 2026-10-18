@@ -266,6 +266,13 @@ class WebCrawler:
         if response is not None and response.status >= 400:
             print(f"[!] HTTP {response.status}: {target_url}")
             return
+        final_key = self._get_dedup_key(page.url)
+        if final_key != dedup_key:                      # 리다이렉트로 다른 주소에 도착
+            if final_key in self.visited_keys:
+                print(f"[-] 이미 방문한 페이지로 이동하여 건너뜁니다: {target_url} -> {page.url}")
+                self.visited_keys.add(dedup_key)
+                return
+            self.visited_keys.add(final_key)
         self.visited_keys.add(dedup_key)
 
         t0 = time.time()
@@ -378,39 +385,57 @@ class WebCrawler:
                 return v;
             }
 
-            function getUniqueCssSelector(el) {
-                if (!(el instanceof Element)) return '';
+            // JS 가 수시로 바꾸는 상태/반응형 클래스는 선택자에 쓰지 않는다 (채점 시점에 값이 달라질 수 있음)
+            const VOLATILE = new Set(['active','on','off','open','opened','close','closed','show','shown','hide','hidden-on',
+                'selected','current','hover','focus','focused','loaded','loading','js','no-js','expanded','collapsed','checked',
+                'disabled','sticky','fixed','scrolled','mobile','tablet','desktop','pc','slick-current','slick-active',
+                'swiper-slide-active','swiper-slide-next','swiper-slide-prev']);
+            function stableClasses(el) {
+                if (!el.className || typeof el.className !== 'string') return '';
+                return el.className.trim().split(/\\s+/).filter(c => c && !VOLATILE.has(c.toLowerCase())
+                    && !/^(is|has)[-_]/i.test(c)).join(' ');
+            }
+            function buildSelector(el, useClasses) {
                 let path = [];
                 while (el && el.nodeType === Node.ELEMENT_NODE) {
-                    let selector = el.nodeName.toLowerCase();
+                    const tag = el.nodeName.toLowerCase();
+                    let selector = tag;
                     const parent = el.parentElement;
-
-                    if (el.className && typeof el.className === 'string' && el.className.trim()) {
-                        const validClasses = el.className.trim().split(/\\s+/).map(c => CSS.escape(c)).join('.');
-                        selector += '.' + validClasses;
+                    if (tag === 'html' || tag === 'body') {         // 문서에 하나뿐이라 클래스가 필요 없다
+                        path.unshift(selector);
+                        el = parent;
+                        continue;
                     }
-
+                    const mine = useClasses ? stableClasses(el) : '';
+                    if (mine) selector += '.' + mine.split(' ').map(c => CSS.escape(c)).join('.');
                     if (parent) {
-                        const siblings = Array.from(parent.children);
-                        const sameTagAndClassSiblings = siblings.filter(child => {
-                            if (child.nodeName.toLowerCase() !== el.nodeName.toLowerCase()) return false;
-                            return child.className === el.className;
-                        });
-
-                        if (sameTagAndClassSiblings.length > 1) {
-                            let nth = 1;
-                            let sibling = el;
-                            while (sibling = sibling.previousElementSibling) {
-                                if (sibling.nodeName.toLowerCase() === el.nodeName.toLowerCase()) nth++;
+                        const same = Array.from(parent.children).filter(ch =>
+                            ch.nodeName.toLowerCase() === tag && (!useClasses || stableClasses(ch) === mine));
+                        if (same.length > 1) {
+                            let nth = 1, sib = el;
+                            while (sib = sib.previousElementSibling) {
+                                if (sib.nodeName.toLowerCase() === tag) nth++;
                             }
                             selector += `:nth-of-type(${nth})`;
                         }
                     }
-
                     path.unshift(selector);
-                    el = el.parentElement;
+                    el = parent;
                 }
                 return path.join(' > ');
+            }
+            function isUnique(sel, el) {
+                try {
+                    const hits = el.ownerDocument.querySelectorAll(sel);
+                    return hits.length === 1 && hits[0] === el;
+                } catch (e) { return false; }
+            }
+            function getUniqueCssSelector(el) {
+                if (!(el instanceof Element)) return '';
+                const withClasses = buildSelector(el, true);
+                if (isUnique(withClasses, el)) return withClasses;      // 사람이 읽기 쉬운 형태를 우선
+                const structural = buildSelector(el, false);            // 클래스 없이 위치만으로
+                return isUnique(structural, el) ? structural : withClasses;
             }
 
             const results = [];
@@ -514,7 +539,8 @@ class WebCrawler:
         try:
             parsed = urlparse(url)
             scheme = "https" if parsed.scheme in ("http", "https") else parsed.scheme
-            normalized_path = parsed.path.rstrip('/') if parsed.path != '/' else '/'
+            path = re.sub(r"/index\.(?:html?|php|jsp|asp|aspx|do)$", "/", parsed.path, flags=re.I)   # /index.html == /
+            normalized_path = path.rstrip('/') if path != '/' else '/'
             
             query_str = ""
             if parsed.query:

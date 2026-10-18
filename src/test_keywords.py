@@ -32,6 +32,14 @@ GOOD = [
     "중국 성도박범가특교육 대표단 본교 방문(MOU 체결)", "세미나 타임슬롯 안내", "야구부 배팅 연습장 이용 안내",
 ]
 
+def test_short_keyword_boundary():
+    # 낱말 한가운데에 들어간 2글자 키워드는 오탐 (성도박물관, 타임슬롯, 성도박범가)
+    for ok in ["성도박물관 방문", "세미나 타임슬롯 안내", "중국 성도박범가특교육 대표단"]:
+        assert not find_keywords(ok), ok
+    # 앞머리이거나 흔한 접두어가 붙으면 인정
+    for bad in ["도박 사이트 홍보", "불법도박 사이트", "온라인슬롯 이벤트", "무료 슬롯 체험 바로가기", "스포츠토토 분석", "BET 첫충 30% 지급"]:
+        assert find_keywords(bad), bad
+
 def test_bad_samples_flagged():
     missed = [t for t in BAD if not find_keywords(t)]
     assert not missed, f"놓친 문구: {missed}"
