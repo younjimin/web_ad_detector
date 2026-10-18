@@ -69,5 +69,8 @@ def detect_transparent_in_elements(elements):
         if d:
             seen.add(key)
             findings.append({"url": e["url"], "location": e["location"], "evidence_text": d["evidence_text"],
-                             "technique": "TRANSPARENT", "is_violation": True})
+                             "technique": "TRANSPARENT", "is_violation": True,
+                             "detail": {"keywords": d["matched_keywords"],
+                                        "reason": "글자가 보이지 않게 처리됨(" + ", ".join(d["reasons"]) + "), 금칙어: "
+                                                  + ", ".join(d["matched_keywords"])}})
     return findings

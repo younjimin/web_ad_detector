@@ -74,7 +74,11 @@ def detect_jamo_in_elements(elements: List[Dict]) -> List[Dict]:
             direct_detected_locations.add((url, location))
             findings.append({"url": url, "location": location,
                              "evidence_text": detection["evidence_text"],
-                             "technique": "JAMO", "is_violation": True, "_is_direct": True})
+                             "technique": "JAMO", "is_violation": True, "_is_direct": True,
+                             "detail": {"keywords": detection["matched_keywords"],
+                                        "reason": "자모를 음절로 조합하면 금칙어가 드러남: "
+                                                  + ", ".join(detection["matched_keywords"])
+                                                  + " (조합 결과: " + detection["recomposed_text"] + ")"}})
     full_candidates: List[Dict] = []
     full_seen: Set[tuple] = set()
     for elem in elements:
@@ -91,7 +95,11 @@ def detect_jamo_in_elements(elements: List[Dict]) -> List[Dict]:
             full_seen.add(loc_key)
             full_candidates.append({"url": url, "location": location,
                                     "evidence_text": detection["evidence_text"],
-                                    "technique": "JAMO", "is_violation": True, "_is_direct": False})
+                                    "technique": "JAMO", "is_violation": True, "_is_direct": False,
+                                    "detail": {"keywords": detection["matched_keywords"],
+                                               "reason": "쪼개진 요소들의 전체 글을 조합하면 금칙어가 드러남: "
+                                                         + ", ".join(detection["matched_keywords"])
+                                                         + " (조합 결과: " + detection["recomposed_text"] + ")"}})
     flagged_all = [(f["url"], f["location"]) for f in findings] + [(c["url"], c["location"]) for c in full_candidates]
     filtered_full: List[Dict] = []
     for cand in full_candidates:

@@ -1,4 +1,3 @@
-#Out of screen detection
 """OFFSCREEN 탐지: 금칙어가 들어 있는데 사람 눈에는 안 보이게 숨긴 텍스트.
  - font-size 0~1px
  - display:none (자기 자신 또는 조상) → 자식은 display 값이 inline 으로 나오므로 rect 가 0x0 인지로 판단
@@ -103,5 +102,8 @@ def detect_offscreen_in_elements(elements: List[Dict]) -> List[Dict]:
         if d:
             seen.add(key)
             findings.append({"url": e["url"], "location": e["location"], "evidence_text": d["evidence_text"],
-                             "technique": "OFFSCREEN", "is_violation": True})
+                             "technique": "OFFSCREEN", "is_violation": True,
+                             "detail": {"keywords": d["matched_keywords"],
+                                        "reason": "화면 밖/숨김 처리됨(" + ", ".join(d["reasons"]) + "), 금칙어: "
+                                                  + ", ".join(d["matched_keywords"])}})
     return findings

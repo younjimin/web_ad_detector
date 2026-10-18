@@ -71,6 +71,7 @@ class WebCrawler:
         self.max_pages = max_pages            
         self.total_timeout_sec = total_timeout_sec
         self.workers = max(1, workers)
+        self.should_stop = lambda: False      # GUI 의 '중지' 버튼용: True 를 돌려주면 새 페이지를 가져가지 않고 끝낸다
         self.visited_keys: Set[str] = set()
 
     async def fetch_page_data(self) -> Dict[str, Any]:
@@ -105,7 +106,11 @@ class WebCrawler:
                 page = await context.new_page()
                 try:
                     while True:
+                        if self.should_stop():
+                            print("[!] 사용자 요청으로 크롤링을 중지합니다.")
+                            return
                         if time.time() - start_time > self.total_timeout_sec:
+                            print(f"[!] 제한 시간({self.total_timeout_sec:.0f}초)에 도달해 크롤링을 마칩니다.")
                             return
                         if len(self.visited_keys) + state["busy"] >= self.max_pages:
                             return

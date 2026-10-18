@@ -193,6 +193,12 @@ def detect_homoglyph_in_elements(elements: List[Dict]) -> List[Dict]:
                 "evidence_text": detection["evidence_text"],
                 "technique": "HOMOGLYPH",
                 "is_violation": True,
+                "detail": {
+                    "keywords": detection["matched_keywords"],
+                    "reason": "닮은꼴 문자를 일반 문자로 바꾸면(정규화) 금칙어가 드러남: "
+                              + ", ".join(detection["matched_keywords"])
+                              + " (정규화 결과: " + detection["normalized_text"] + ")",
+                },
             })
 
     return findings
