@@ -41,18 +41,18 @@ jobs:
         shell: pwsh
         env:
           PLAYWRIGHT_BROWSERS_PATH: "0"
-        run: pyinstaller --noconfirm --onedir --console --name "PublicWebScan" --paths src --collect-all playwright src/main.py
+        run: pyinstaller --noconfirm --onedir --console --name "Seorinuri" --paths src --collect-all playwright src/main.py
 
       - name: Copy editable dictionary next to exe
         shell: pwsh
-        run: Copy-Item src/banned_keywords.json dist/PublicWebScan/
+        run: Copy-Item src/banned_keywords.json dist/Seorinuri/
 
       - name: Smoke test with the local test site
         shell: pwsh
         run: |
           Start-Process python -ArgumentList "-m","http.server","8000" -WorkingDirectory test_site -WindowStyle Hidden
           Start-Sleep -Seconds 2
-          .\dist\PublicWebScan\PublicWebScan.exe http://localhost:8000/index.html --out smoke
+          .\dist\Seorinuri\Seorinuri.exe http://localhost:8000/index.html --out smoke
           if ($LASTEXITCODE -ne 0) { throw "exe exit code $LASTEXITCODE" }
           python -c "import json; d=json.load(open('smoke/result.json',encoding='utf-8')); n=len(d['findings']); print('findings', n); assert n == 13"
           python -c "import json; d=json.load(open('smoke/result_extra.json',encoding='utf-8')); print('extra', len(d['findings'])); assert 'findings' in d and 'meta' in d"
@@ -60,6 +60,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PublicWebScan
-          path: dist/PublicWebScan
+          name: Seorinuri
+          path: dist/Seorinuri
           include-hidden-files: true     # Playwright 가 브라우저를 넣는 .local-browsers 는 숨김 폴더라서, 이 옵션이 없으면 Artifact 에서 빠진다
