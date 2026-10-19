@@ -44,6 +44,7 @@ class App:
         self.stop_flag = threading.Event()
         self.worker: Optional[threading.Thread] = None
         self.running, self.t0 = False, 0.0
+        self.n_extra = 0
         self.rows: List[Dict] = []
         self.visible: List[Dict] = []
         self.last_ret: Optional[Dict] = None
@@ -119,7 +120,8 @@ class App:
         sumf = ttk.Frame(self.root)
         sumf.pack(fill="x", pady=4, **pad)
         self.sum_labels: Dict[str, tk.Label] = {}
-        for key, title, color in [("TOTAL", "총 탐지", "#222")] + [(t, TECH_INFO[t][0], COLORS[t]) for t in TECH_ORDER]:
+        for key, title, color in [("TOTAL", "총 탐지", "#222")] + [(t, TECH_INFO[t][0], COLORS[t]) for t in TECH_ORDER] \
+                + [("ETC", "추가 탐지 (result_extra.json)", "#475569")]:
             box = tk.Frame(sumf, highlightbackground="#d5d9e0", highlightthickness=1, bg="white")
             box.pack(side="left", fill="x", expand=True, padx=(0, 8))
             n = tk.Label(box, text="0", font=(self.font, 20, "bold"), fg=color, bg="white")
@@ -268,6 +270,7 @@ class App:
         self.last_ret = ret
         result = ret["result"]
         self.elapsed_var.set(f"소요 {result['meta']['elapsed_sec']}초")
+        self.n_extra = len((ret.get("extra") or {}).get("findings", []))
         self.load_rows(result, ret.get("details", {}))
         for b in (self.btn_report, self.btn_json):
             b.configure(state="normal")
@@ -276,8 +279,7 @@ class App:
         if ret.get("error"):
             self.status_var.set(f"오류가 있었지만 가능한 결과를 저장했습니다: {ret['error']}")
         else:
-            n_extra = len((ret.get("extra") or {}).get("findings", []))
-            more = f" (+추가 탐지 {n_extra}건: result_extra.json)" if n_extra else ""
+            more = f" (+추가 탐지 {self.n_extra}건: result_extra.json)" if self.n_extra else ""
             self.status_var.set(f"완료{tail} — {ret['pages']}개 페이지 검사, {n}건 탐지{more}. 결과 파일: {ret['result_path']}")
 
     def on_close(self):
@@ -293,6 +295,7 @@ class App:
             self.rows.append({"id": f["id"], "tech": f["technique"], "url": f["url"], "loc": f["location"],
                               "ev": f["evidence_text"], "why": details.get((f["url"], f["location"], f["technique"]), "")})
         self.update_summary(result["findings"])
+        self.sum_labels["ETC"].configure(text=str(self.n_extra))
         self.refresh_table()
         kids = self.tree.get_children()
         if kids:
@@ -399,6 +402,12 @@ class App:
         except Exception as e:
             messagebox.showerror("불러오기 실패", f"result.json 형식이 아닙니다.\n\n{e}")
             return
+        self.n_extra = 0
+        try:
+            with open(Path(path).with_name("result_extra.json"), encoding="utf-8-sig") as fp:
+                self.n_extra = len(json.load(fp)["findings"])
+        except Exception:
+            pass
         self.load_rows(result, {})
         rp = write_report(result, self.out_dir / "report.html")
         self.last_ret = {"result": result, "result_path": Path(path), "report_path": rp, "pages": "-", "details": {}}
