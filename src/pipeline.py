@@ -1,8 +1,8 @@
-"""요소 목록 -> 탐지기 4종 -> 정리된 findings. (크롤러와 분리해 두어 json 덤프로도 테스트 가능)"""
+"""요소 목록을 탐지기에 넘겨 findings 로 정리한다. 크롤러와 분리되어 있어 요소 덤프만으로도 테스트할 수 있다."""
 from typing import Dict, List
 
-from homoglyph import detect_homoglyph_in_elements
 from extra import detect_extra_in_elements
+from homoglyph import detect_homoglyph_in_elements
 from jamo import detect_jamo_in_elements
 from offscreen import detect_offscreen_in_elements
 from transparent import detect_transparent_in_elements

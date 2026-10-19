@@ -8,8 +8,8 @@ from jamo import compose_jamo, detect_jamo, detect_jamo_in_elements
 
 # ---------- 0. 사전 확인 ----------
 def test_dictionary_has_dobak():
-    # 테스트 사이트의 p.split(ㄷㅗㅂㅏㄱ)을 잡으려면 homoglyph.py 의 BANNED_KEYWORDS 에 "도박" 추가 필요
-    assert "도박" in homoglyph.BANNED_KEYWORDS, "homoglyph.py 의 BANNED_KEYWORDS 에 '도박'을 추가하세요"
+    # 테스트 사이트의 p.split(ㄷㅗㅂㅏㄱ)은 사전에 "도박"이 있어야 잡힌다
+    assert "도박" in homoglyph.BANNED_KEYWORDS
 
 
 # ---------- 1. 재조합 ----------

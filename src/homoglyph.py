@@ -4,8 +4,6 @@ from functools import lru_cache
 from typing import Dict, List, Optional, Set
 
 # 키릴/그리스 등 닮은꼴 -> 라틴 문자 치환표
-# 주의: 대문자 키릴(В, Н, К, М, Т)은 소문자로 바꾸면 라틴 b/h/k/m/t 와 모양이 달라지므로
-#       대문자 항목을 지우면 안 된다. (normalize 에서 치환 -> lower -> 치환 2회 적용)
 # 이 표는 손으로 만든 것이므로, 항목을 늘릴 때는 Unicode confusables.txt(UTS #39)와 대조할 것.
 CONFUSABLE_MAP: Dict[str, str] = {
     # 키릴 소문자
@@ -38,8 +36,8 @@ CONFUSABLE_MAP: Dict[str, str] = {
     "\u03c5": "u",  # υ (upsilon) - 모양이 u 와 비슷
 }
 
-# 금칙어 사전은 keywords.py 에 있다 (strong / weak+유도문구 / 예외, 외부 json 으로 갱신 가능).
-# BANNED_KEYWORDS 는 'strong' 단어 목록(한글+영문)으로, 숫자/기호 위장(leet) 탐지와 기존 코드 호환용이다.
+# 금칙어 사전은 keywords.py 에 있다. BANNED_KEYWORDS 는 그중 strong 단어(한글+영문) 목록이고,
+# 숫자·기호로 위장한 영문 단어(leet)를 찾을 때 쓴다.
 from keywords import DICTIONARY
 
 BANNED_KEYWORDS: List[str] = DICTIONARY.strong_all
@@ -109,6 +107,7 @@ def _leet_pattern(keyword: str):
     return re.compile(r"(?<![a-z0-9])" + "".join(parts) + r"(?![a-z0-9])")
 
 
+# 같은 문구가 페이지마다 반복되므로 결과를 기억해 둔다. 20만 건이 넘으면 비운다.
 _LEET_CACHE: Dict[str, List[str]] = {}
 
 
@@ -173,19 +172,14 @@ def detect_homoglyph(raw_text: str) -> Optional[Dict]:
 
 
 def detect_homoglyph_in_elements(elements: List[Dict]) -> List[Dict]:
-    """
-    크롤러 elements 의 direct_text 만 검사한다. (url, location) 단위로 1건.
-    direct_text 필드가 없으면 크롤러 수정이 빠진 것이므로 조용히 넘어가지 않고 에러를 낸다.
-    """
+    """요소가 직접 가진 텍스트(direct_text)만 검사한다. (url, location) 하나당 1건.
+    direct_text 가 없는 요소 목록은 조용히 넘기지 않고 에러를 낸다."""
     findings: List[Dict] = []
     seen_locations: Set[tuple] = set()
 
     for elem in elements:
         if "direct_text" not in elem:
-            raise KeyError(
-                "elements 에 'direct_text' 필드가 없습니다. "
-                "크롤러 JS 의 results.push 안에 direct_text: trimmedDirectText 를 추가하세요."
-            )
+            raise KeyError("elements 에 'direct_text' 필드가 없습니다. 크롤러가 요소마다 direct_text 를 담아야 합니다.")
 
         url = elem.get("url", "")
         location = elem.get("location", "")

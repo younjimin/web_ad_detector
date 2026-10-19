@@ -52,7 +52,6 @@ def detect_transparent(text, style, eff_opacity=None, eff_bg=None):
                 ratio = contrast_ratio(fg, bg)
                 if ratio < CONTRAST_LIMIT:
                     reasons.append(f"contrast={ratio:.2f}")
-    # visibility:hidden 은 주최 측 답변상 기본 4종 정답이 아니다 → extra.py(ETC)에서 다룬다
     if not reasons:
         return None
     return {"evidence_text": text, "matched_keywords": kws, "reasons": reasons}
@@ -60,7 +59,9 @@ def detect_transparent(text, style, eff_opacity=None, eff_bg=None):
 def detect_transparent_in_elements(elements):
     findings, seen = [], set()
     for e in elements:
-        text = e["direct_text"]; e["eff_opacity"]; e["eff_bg"]      # 없으면 KeyError
+        text = e["direct_text"]
+        if "eff_opacity" not in e or "eff_bg" not in e:
+            raise KeyError("eff_opacity / eff_bg")
         key = (e["url"], e["location"])
         if key in seen:
             continue

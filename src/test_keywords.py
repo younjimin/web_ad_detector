@@ -7,7 +7,7 @@ from homoglyph import find_keywords
 BAD = [
     "카지노 무료 쿠폰 지급", "바카라 필승 전략 텔레그램 문의", "먹튀검증 안전놀이터 상담 텔레그램 @promo_777",
     "토토 사이트 추천 가입 즉시 지급", "홀덤 포커 머니 충전 텔레그램", "무료 슬롯 체험 바로가기",
-    "카 지 노 가입코드 LUCKY7", "카.지.노 최신주소", "카​지​노 이벤트", "온라인 바 카 라 상담",
+    "카 지 노 가입코드 LUCKY7", "카.지.노 최신주소", "카\u200b지\u200b노 이벤트", "온라인 바 카 라 상담",
     "성인 만남 채팅 바로가기", "조건만남 24시 상담 010-1234-5678", "출장안마 후불제 문의 카톡 abc123",
     "불법 대출 당일 승인", "무직자대출 당일 지급 문의 010 1234 5678", "당일 대출 즉시 승인 카톡 문의",
     "소액결제 현금화 최고 수수료", "카드깡 통장매매 문의", "비아그라 시알리스 정품 판매", "미프진 구매 텔레그램",
@@ -73,7 +73,7 @@ def test_compact_matching_only_for_strong_long_words():
     assert find_keywords("토 토") == []                    # 2글자는 다른 단어끼리 붙을 위험이 커서 제외
 
 def test_zero_width_inside_word():
-    assert "카지노" in find_keywords("카​지​노")
+    assert "카지노" in find_keywords("카\u200b지\u200b노")
 
 def test_english_boundary():
     assert find_keywords("Essex") == [] and find_keywords("embetter") == []

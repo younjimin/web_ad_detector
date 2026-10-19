@@ -56,3 +56,4 @@ if __name__ == "__main__":
         try: f(); print("PASS ", n)
         except Exception as e: bad += 1; print("FAIL ", n, "->", type(e).__name__, e)
     print(f"\n{len(tests)-bad}/{len(tests)} passed")
+

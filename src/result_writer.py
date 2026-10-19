@@ -7,7 +7,7 @@ from typing import Dict, List
 
 TOOL_VERSION = "0.1.0"
 TECHNIQUES = ("HOMOGLYPH", "JAMO", "TRANSPARENT", "OFFSCREEN")
-DEFAULT_TOPIC = "TOPIC"          # 모집요강 붙임4 작성 예시: "topic": "TOPIC" (설명: TOPIC(불법광고))
+DEFAULT_TOPIC = "TOPIC"          # 붙임4 예시 값
 
 
 def _iso(dt: datetime) -> str:

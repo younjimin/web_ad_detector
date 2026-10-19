@@ -42,7 +42,7 @@ def test_text_indent_and_transform():
     assert names(style=S(transform="matrix(1, 0, 0, 1, -9999, 0)")) == ["transform 화면 밖 은닉"]
 
 def test_zero_width_characters():
-    assert names(text="카​지​노 무료 쿠폰") == ["제로폭 문자 삽입"]
+    assert names(text="카\u200b지\u200b노 무료 쿠폰") == ["제로폭 문자 삽입"]
 
 def test_visible_text_not_flagged():
     assert names() == []

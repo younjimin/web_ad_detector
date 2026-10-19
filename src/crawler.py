@@ -1,4 +1,4 @@
-#Web crawler, DOM parsing
+"""진입 URL에서 시작해 같은 도메인의 페이지를 돌면서, 페이지마다 텍스트 요소와 스타일·위치(CSS 선택자)를 모은다."""
 
 import asyncio
 import math
@@ -9,14 +9,14 @@ from urllib.parse import urlparse, urljoin, parse_qsl, urlencode
 from typing import List, Dict, Any, Set, Optional, Tuple
 from playwright.async_api import async_playwright, Page, Frame
 
-# HTML 이 아닌 파일(다운로드/미디어)은 페이지가 아니므로 크롤링하지 않는다
+# 이 확장자로 끝나는 주소는 페이지가 아니라 파일이라 따라가지 않는다
 FILE_EXTS = (".pdf", ".hwp", ".hwpx", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".zip", ".rar", ".7z",
              ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp", ".mp3", ".mp4", ".avi", ".wmv", ".mov",
              ".txt", ".csv", ".xml", ".json", ".exe", ".apk", ".css", ".js", ".ico")
 
 
 class PageCrashed(Exception):
-    """브라우저 탭이 죽음(메모리 부족 등). 탭을 새로 만들어야 한다."""
+    """브라우저 탭이 죽었을 때(메모리 부족 등) 던진다. 탭을 새로 열어야 한다."""
 
 
 def url_template(url: str) -> str:
@@ -32,12 +32,10 @@ def url_template(url: str) -> str:
 
 
 class FairQueue:
-    """같은 생김새의 URL 이 방문 순서를 독점하지 못하게 하는 큐.
-    각 '생김새'(템플릿)마다 점수 = (방문한 수 + 1) / sqrt(지금까지 발견된 수) 를 계산하고,
-    점수가 가장 낮은 템플릿의 다음 URL 을 꺼낸다 (동률이면 먼저 발견된 템플릿).
-     - 한 템플릿이 독점하지 못한다 (방문할수록 점수가 올라간다)
-     - 대신 같은 모양이 많이 쏟아지는 템플릿(게시글 상세 등)은 몫이 조금 더 크다 (sqrt)
-     - 시간이 충분하면 결국 전부 방문한다. 시간이 모자랄 때 다양한 유형을 먼저 본다."""
+    """게시글 상세처럼 같은 모양의 URL 이 수천 개 쏟아져도 다른 유형의 페이지가 밀리지 않게 하는 큐.
+    템플릿마다 점수 (방문한 수 + 1) / sqrt(발견된 수) 를 매기고, 점수가 가장 낮은 템플릿에서 다음 URL 을 꺼낸다.
+    많이 발견된 템플릿일수록 몫이 조금 더 크지만, 방문할수록 점수가 올라가서 한 템플릿이 독점하지는 못한다.
+    시간이 충분하면 전부 방문하고, 모자라면 다양한 유형을 먼저 보게 된다."""
     def __init__(self):
         self.buckets: Dict[str, deque] = {}
         self.taken: Dict[str, int] = {}
@@ -76,22 +74,19 @@ async def _normal_user_agent(browser) -> str:
 
 
 class WebCrawler:
-    """
-    공공 웹사이트 크롤링 및 DOM/CSS 정보 수집 모듈
-    (스킴 분리, 중복 방지 키 적용, 고유 선택자, DOM src 기반 중첩 iframe 체인 지원)
-    """
+    """같은 도메인의 페이지를 여러 탭으로 돌면서 요소 정보를 모은다. iframe 안쪽 요소도 함께 수집한다."""
     def __init__(self, entry_url: str, max_pages: int = 30, total_timeout_sec: float = 1200.0, workers: int = 4):
         self.entry_url = entry_url.strip()
         self.parsed_entry = urlparse(self.entry_url)
         self.domain = self.parsed_entry.netloc
-        self.max_pages = max_pages            
+        self.max_pages = max_pages
         self.total_timeout_sec = total_timeout_sec
         self.workers = max(1, workers)
         self.should_stop = lambda: False      # GUI 의 '중지' 버튼용: True 를 돌려주면 새 페이지를 가져가지 않고 끝낸다
         self.visited_keys: Set[str] = set()
 
     async def fetch_page_data(self) -> Dict[str, Any]:
-        """여러 탭(workers)이 같은 큐에서 동시에 페이지를 가져간다. 결과는 방문 순서대로 정렬해 돌려준다."""
+        """탭 여러 개가 한 큐에서 페이지를 가져가 동시에 처리한다. 결과는 방문 순서대로 정렬해 돌려준다."""
         print(f"[*] 웹 크롤링 시작 (진입점: {self.entry_url}, 도메인: {self.domain}, 동시 탭: {self.workers})")
         start_time = time.time()
 
@@ -111,7 +106,7 @@ class WebCrawler:
             ua = await _normal_user_agent(browser)
             context = await browser.new_context(user_agent=ua, locale="ko-KR")
 
-            # 이미지/영상/폰트는 텍스트 탐지에 필요 없으므로 받지 않는다 (속도)
+            # 텍스트만 보면 되니 이미지·영상·폰트는 받지 않는다
             async def _block_heavy(route):
                 if route.request.resource_type in ("image", "media", "font"):
                     await route.abort()
@@ -209,7 +204,7 @@ class WebCrawler:
         response = None
         for attempt, limit in enumerate((30000, 45000)):
             try:
-                # 서버가 응답을 시작하면(commit) 진행한다. 느린 외부 스크립트 때문에 DOMContentLoaded 가 늦어도 받은 만큼으로 검사한다.
+                # 서버가 응답을 시작하면(commit) 일단 진행하고, 본문은 아래에서 따로 기다린다
                 response = await page.goto(target_url, wait_until="commit", timeout=limit)
                 break
             except Exception as e:
@@ -223,8 +218,7 @@ class WebCrawler:
                 else:
                     print(f"[!] 페이지 접속 실패 ({target_url}): {msg}")
                     return
-        # 본문이 도착할 때까지 기다린다. DOMContentLoaded 가 느린 외부 스크립트 때문에 늦는 경우는 본문이 이미 있으니 진행하고,
-        # 서버가 본문을 늦게 보내는 경우(본문이 비어 있음)는 더 기다린다.
+        # 본문 텍스트가 생길 때까지 최대 10초 기다린다 (DOMContentLoaded 는 외부 스크립트 때문에 늦기도 해서 본문 기준으로 본다)
         try:
             await page.wait_for_load_state("domcontentloaded", timeout=25000)
         except Exception:
@@ -241,8 +235,8 @@ class WebCrawler:
         if not ready:
             print(f"[!] 본문이 비어 있어 건너뜁니다 ({target_url})")
             return
-        # iframe 안의 문서도 도착할 때까지 기다린다 (느린 서버에서 iframe 내용이 빠지는 것을 막는다)
-        for _ in range(3):                      # iframe 안에 또 iframe 이 있을 수 있어 새 프레임이 더 안 생길 때까지 반복
+        # iframe 안의 문서도 로드될 때까지 기다린다. iframe 안에 iframe 이 있을 수 있어 프레임 수가 안 늘 때까지(최대 3번) 반복
+        for _ in range(3):
             n_before = len(page.frames)
             for fr in list(page.frames):
                 if fr == page.main_frame:
@@ -254,8 +248,7 @@ class WebCrawler:
             await asyncio.sleep(0.2)
             if len(page.frames) == n_before:
                 break
-        t1 = time.time()
-        # 동적으로 붙는 내용(댓글 등)을 위해 네트워크가 잠잠해질 때까지 최대 2초, 그 뒤 잠깐 더
+        # 댓글처럼 나중에 붙는 내용을 위해 네트워크가 잠잠해질 때까지 최대 2초 기다린다
         try:
             await page.wait_for_load_state("networkidle", timeout=2000)
         except Exception:
@@ -295,35 +288,32 @@ class WebCrawler:
         timing["links"] += time.time() - t0
 
     async def _build_iframe_chain(self, frame: Frame) -> str:
-        """
-        중첩 iframe 상위 체인 추적:
-        리다이렉트 전 DOM 태그의 원본 src 속성값을 직접 읽어오도록 개선
-        """
+        """바깥 iframe 부터 차례로 src 를 이어 붙인 위치 문자열을 만든다.
+        리다이렉트되기 전 주소를 쓰려고 frame.url 대신 iframe 태그의 src 속성을 읽는다."""
         chain = []
         curr_frame: Optional[Frame] = frame
-        
+
         while curr_frame and curr_frame.parent_frame:
             parent = curr_frame.parent_frame
             raw_src = ""
-            
+
             try:
-                # 부모 프레임에서 해당 iframe 요소의 DOM src 속성값 추출
                 frame_element = await curr_frame.frame_element()
                 raw_src = await frame_element.get_attribute("src") or ""
-                
-                # 상대 경로인 경우 부모 페이지 URL 기준 절대 경로로 조립
+
+                # 상대 경로는 부모 페이지 기준 절대 주소로 바꾼다
                 if raw_src and not raw_src.startswith(('http://', 'https://', '//')):
                     raw_src = urljoin(parent.url, raw_src)
                 elif raw_src.startswith('//'):
                     parsed_parent = urlparse(parent.url)
                     raw_src = f"{parsed_parent.scheme}:{raw_src}"
             except Exception:
-                # DOM 접근 실패 시 fallback으로 frame.url 사용
+                # 태그를 못 읽으면 frame.url 로 대신한다
                 raw_src = curr_frame.url or "about:blank"
 
             chain.append(f'iframe[src="{raw_src}"]')
             curr_frame = parent
-        
+
         chain.reverse()
         return " >>> ".join(chain)
 
@@ -334,10 +324,10 @@ class WebCrawler:
             for href in hrefs:
                 if not href or href.startswith(('javascript:', 'mailto:', 'tel:', '#')):
                     continue
-                
+
                 full_url = urljoin(page.url, href)
                 parsed = urlparse(full_url)
-                
+
                 if parsed.netloc == self.domain and parsed.scheme in ('http', 'https') \
                         and not parsed.path.lower().endswith(FILE_EXTS):
                     valid_links.append(full_url)
@@ -440,7 +430,7 @@ class WebCrawler:
 
             const results = [];
             const elements = document.querySelectorAll('p, span, div, a, li, td, th, h1, h2, h3, h4, h5, h6, b, i, em, strong');
-            
+
             elements.forEach(el => {
                 let directText = '';
                 for (let child of el.childNodes) {
@@ -448,13 +438,13 @@ class WebCrawler:
                         directText += child.textContent;
                     }
                 }
-                
+
                 const trimmedDirectText = directText.trim();
                 // 자기 글자가 없고 안쪽 글자가 300자를 넘는 큰 컨테이너는 건너뛴다.
                 // (자식들이 따로 수집되므로 중복이고, innerText 계산이 느리다)
                 if (!trimmedDirectText && (el.textContent || '').length > 300) return;
                 const fullInnerText = (el.innerText || '').trim();
-                
+
                 if (trimmedDirectText.length > 0 || fullInnerText.length > 0) {
                     const style = window.getComputedStyle(el);
                     const rect = el.getBoundingClientRect();
@@ -514,26 +504,26 @@ class WebCrawler:
 
         try:
             extracted_data = await frame.evaluate(script)
-            
-            for item in extracted_data: 
+
+            for item in extracted_data:
                 item['url'] = page_url
                 if is_iframe and iframe_chain:
                     item['location'] = f"{iframe_chain} >>> {item['location']}"
-                
-                    
+
+
             return extracted_data
         except Exception as e:
             print(f"[!] 프레임 수집 실패 ({frame_url}): {e}")
             return []
-        
+
     def _normalize_url(self, url: str) -> str:
         try:
             parsed = urlparse(url)
             normalized_path = parsed.path.rstrip('/') if parsed.path != '/' else '/'
             query_str = f"?{parsed.query}" if parsed.query else ""
             return f"{parsed.scheme}://{parsed.netloc}{normalized_path}{query_str}"
-        except Exception: 
-            return url 
+        except Exception:
+            return url
 
     def _get_dedup_key(self, url: str) -> str:
         try:
@@ -541,7 +531,7 @@ class WebCrawler:
             scheme = "https" if parsed.scheme in ("http", "https") else parsed.scheme
             path = re.sub(r"/index\.(?:html?|php|jsp|asp|aspx|do)$", "/", parsed.path, flags=re.I)   # /index.html == /
             normalized_path = path.rstrip('/') if path != '/' else '/'
-            
+
             query_str = ""
             if parsed.query:
                 sorted_params = sorted(parse_qsl(parsed.query, keep_blank_values=True))
@@ -550,20 +540,3 @@ class WebCrawler:
             return f"{scheme}://{parsed.netloc}{normalized_path}{query_str}"
         except Exception:
             return url
-
-if __name__ == "__main__":
-    async def test_run():
-        crawler = WebCrawler("example.com", max_pages=10)
-        result = await crawler.fetch_page_data()
-        print(f"수집된 총 요소 수: {len(result['elements'])}")
-
-    asyncio.run(test_run())
-# 중복 수집: div, span 같은 래퍼 요소도 선택 대상입니다. 직접 텍스트가 없으면 text에 하위 전체 텍스트(fullInnerText)가 들어가므로, 같은 텍스트가 부모 요소 수만큼 반복해서 저장됩니다. 데이터가 불필요하게 커질 수 있습니다.
-# 실패한 페이지도 카운트: visited_keys.add가 접속 시도 전에 실행되어서, 접속에 실패한 URL도 max_pages 카운트에 포함됩니다.
-# response 변수는 안 쓰입니다. goto의 반환값을 받아놓고 사용하지 않습니다. HTTP 상태코드 확인에 쓸 수 있습니다.
-# 고정 대기 1.5초: 느린 사이트에서는 렌더링이 안 끝나고, 빠른 사이트에서는 낭비입니다. 보통 특정 요소를 기다리는 wait_for_selector 등을 씁니다.
-# pop(0)은 리스트 맨 앞 삭제라 O(n)입니다. 이 규모에선 문제없지만 큐에는 collections.deque가 정석입니다.
-# 도메인 비교가 단순합니다. www.mois.go.kr과 mois.go.kr은 다른 도메인으로 취급됩니다.
-# except Exception: return []는 에러를 조용히 삼킵니다. iframe 수집이 실패해도 알 수 없어서 디버깅이 어렵습니다.
-# 리다이렉트에 약합니다. 중복 판별이 "요청한 URL" 기준이라, 서로 다른 URL이 같은 페이지로 리다이렉트되면 중복 방문됩니다.
-# robots.txt를 확인하지 않고 요청 간 딜레이도 거의 없습니다. 공공 사이트에 돌릴 때는 서버 부하와 이용약관 면에서 확인이 필요합니다.

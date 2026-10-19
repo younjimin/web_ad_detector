@@ -23,19 +23,12 @@ jobs:
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
-          if (Test-Path requirements.txt) { pip install -r requirements.txt }
-          elseif (Test-Path src/requirements.txt) { pip install -r src/requirements.txt }
-          pip install playwright pyinstaller
+          pip install -r requirements-dev.txt
 
       - name: Run unit tests
         shell: pwsh
         working-directory: src
-        run: |
-          foreach ($t in Get-ChildItem test_*.py) {
-            python $t.Name
-            if ($LASTEXITCODE -ne 0) { exit 1 }
-          }
-          Write-Host "tests finished"
+        run: python -m pytest -q
 
       - name: Install headless Chromium into the Playwright package
         shell: pwsh

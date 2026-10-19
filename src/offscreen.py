@@ -125,7 +125,7 @@ def detect_offscreen(text, style, rect=None):
 def detect_offscreen_in_elements(elements: List[Dict]) -> List[Dict]:
     findings, seen = [], set()
     for e in elements:
-        text = e["direct_text"]; style = e["style"]; rect = e["rect"]     # 없으면 KeyError
+        text, style, rect = e["direct_text"], e["style"], e["rect"]
         key = (e["url"], e["location"])
         if key in seen:
             continue

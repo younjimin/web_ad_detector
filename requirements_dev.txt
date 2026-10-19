@@ -1,0 +1,4 @@
+# 개발·테스트·exe 빌드용 (실행에는 필요 없음)
+-r requirements.txt
+pytest
+pyinstaller
