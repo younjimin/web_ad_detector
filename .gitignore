@@ -12,3 +12,4 @@ smoke/
 result.json
 result_extra.json
 report.html
+.env
