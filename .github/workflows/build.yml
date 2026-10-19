@@ -63,3 +63,4 @@ jobs:
           name: Seorinuri
           path: dist/Seorinuri
           include-hidden-files: true     # Playwright 가 브라우저를 넣는 .local-browsers 는 숨김 폴더라서, 이 옵션이 없으면 Artifact 에서 빠진다
+          
