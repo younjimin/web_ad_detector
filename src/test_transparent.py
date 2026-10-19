@@ -75,9 +75,9 @@ def test_hidden_text_without_banned_keyword_is_not_flagged():
     # 현재 설계: 금칙어가 있어야 판정한다. (스크린리더용 정상 숨김 문구 오탐을 막기 위한 선택)
     assert det(text="본문 바로가기", opacity="0", eff_opacity=0.0) is None
 
-def test_visibility_hidden_is_flagged():
-    # 명세에 없는 경계 사례. 일단 '시각적 은닉'으로 보고 TRANSPARENT 로 분류 (주최 측 확인 필요)
-    assert det(visibility="hidden") is not None
+def test_visibility_hidden_is_not_basic_transparent():
+    # 주최 측 답변: visibility:hidden 은 기본 4종 정답이 아니다 → ETC(extra.py) 로 낸다
+    assert det(visibility="hidden") is None
 
 
 # ---------- 3. 요소 리스트 -> findings ----------

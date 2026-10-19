@@ -1,8 +1,8 @@
 import json, tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
-from  pipeline import run_all_detectors
-from  result_writer import build_result, validate_result, write_result
+from pipeline import run_all_detectors
+from result_writer import build_result, validate_result, write_result
 
 T0 = datetime(2026, 10, 18, 9, 0, 0).astimezone()
 F = lambda u, l, t: {"url": u, "location": l, "evidence_text": "카지노", "technique": t, "is_violation": True, "_x": 1}
@@ -47,3 +47,16 @@ if __name__ == "__main__":
         try: f(); print("PASS ", n)
         except Exception as e: bad += 1; print("FAIL ", n, "->", type(e).__name__, e)
     print(f"\n{len(tests)-bad}/{len(tests)} passed")
+
+
+def test_build_extra_result_schema():
+    from result_writer import build_extra_result
+    ex = [{"url": "u", "location": "p.a", "evidence_text": "근거", "extra_finding": "visibility:hidden 은닉", "technique": "ETC"}]
+    r = build_extra_result("http://a/", T0, T0, ex)
+    assert r["findings"] == [{"id": "x_001", "url": "u", "is_violation": True, "location": "p.a", "evidence_text": "근거",
+                              "technique": "ETC", "extra_finding": "visibility:hidden 은닉"}]
+    assert r["meta"]["topic"] == "TOPIC" and set(r["meta"]) == set(build_result("u", T0, T0, [])["meta"])
+
+def test_build_extra_result_empty():
+    from result_writer import build_extra_result
+    assert build_extra_result("u", T0, T0, [])["findings"] == []

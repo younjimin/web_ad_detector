@@ -39,6 +39,25 @@ def build_result(entry_url: str, started_at: datetime, finished_at: datetime,
     }
 
 
+def build_extra_result(entry_url: str, started_at: datetime, finished_at: datetime,
+                       findings: List[Dict], topic: str = DEFAULT_TOPIC) -> Dict:
+    """result_extra.json: meta + findings(technique="ETC" 고정, extra_finding 에 참가자가 정한 유형 이름)."""
+    items = []
+    for i, f in enumerate(findings, 1):
+        items.append({
+            "id": f"x_{i:03d}",
+            "url": f["url"],
+            "is_violation": bool(f.get("is_violation", True)),
+            "location": f["location"],
+            "evidence_text": f["evidence_text"],
+            "technique": "ETC",
+            "extra_finding": f["extra_finding"],
+        })
+    base = build_result(entry_url, started_at, finished_at, [], topic)
+    base["findings"] = items
+    return base
+
+
 def validate_result(result: Dict) -> List[str]:
     """문제 목록 반환 (비어 있으면 통과)."""
     errs = []

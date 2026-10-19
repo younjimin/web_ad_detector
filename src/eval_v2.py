@@ -11,7 +11,7 @@ import scan_core  # noqa: E402
 folder, port = sys.argv[1], sys.argv[2]
 r = scan_core.run_scan(f"http://localhost:{port}/index.html", out_dir=os.path.join(folder, "out"),
                        log=lambda s: None, max_pages=50)
-fs = r["result"]["findings"]
+fs = r["result"]["findings"] + r["extra"]["findings"]      # result.json + result_extra.json(ETC)
 exp = json.load(open(os.path.join(folder, "expected.json"), encoding="utf-8"))
 pos = [e for e in exp if e[2] != "__NEG__"]
 page_of = lambda f: f["url"].split("/")[-1].split("?")[0]
@@ -24,7 +24,7 @@ for page, ev, tech in pos:
     else:
         miss.append((page, ev, tech, [f["technique"] for f in fs if page_of(f) == page and ev in f["evidence_text"]]))
 fp = [f for i, f in enumerate(fs) if i not in used]
-print(f"pages={r['pages']} findings={len(fs)}  정답 {len(pos)}건 중 {tp}건 적중(재현율 {tp / len(pos):.0%}), 오탐 {len(fp)}건")
+print(f"pages={r['pages']} findings={len(r['result']['findings'])} (+추가 {len(r['extra']['findings'])})  정답 {len(pos)}건 중 {tp}건 적중(재현율 {tp / len(pos):.0%}), 오탐 {len(fp)}건")
 for m in miss:
     print("  놓침:", m)
 for f in fp:

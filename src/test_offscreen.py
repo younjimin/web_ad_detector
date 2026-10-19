@@ -30,18 +30,22 @@ def test_display_none_ancestor():
     assert r and "display:none(ancestor)" in r["reasons"]
 def test_child_of_offscreen_parent_by_rect():
     assert detect_offscreen(KW, S(), {**OK_RECT, "left": -9999, "right": -9899})
-def test_text_indent():
-    assert detect_offscreen(KW, S(textIndent="-9999px"))
-def test_transform_translate():
-    assert detect_offscreen(KW, S(transform="matrix(1, 0, 0, 1, -9999, 0)"))
-def test_transform_small_translate_ok():
-    assert detect_offscreen(KW, S(transform="matrix(1, 0, 0, 1, -20, 0)")) is None
-def test_clip_rect_zero():
-    assert detect_offscreen(KW, S(clip="rect(0px, 0px, 0px, 0px)"))
-def test_clip_path_inset():
-    assert detect_offscreen(KW, S(clipPath="inset(100%)"))
-def test_zero_height_box():
-    assert detect_offscreen(KW, S(), {**OK_RECT, "height": 0})
+# 아래 방식들은 모집요강 OFFSCREEN 정의(font-size 0~1px / left:-9999px 류 / display:none)에 없다 → result.json 에는 넣지 않는다.
+# (주최 측 답변 기준. 대신 extra.py 가 result_extra.json 의 ETC 로 낸다 → test_extra.py)
+def test_text_indent_is_not_basic_offscreen():
+    assert detect_offscreen(KW, S(textIndent="-9999px")) is None
+def test_transform_translate_is_not_basic_offscreen():
+    assert detect_offscreen(KW, S(transform="matrix(1, 0, 0, 1, -9999, 0)")) is None
+def test_transform_pushed_rect_is_not_basic_offscreen():
+    assert detect_offscreen(KW, S(transform="matrix(1, 0, 0, 1, -9999, 0)"), {**OK_RECT, "left": -9999, "right": -9899}) is None
+def test_clip_rect_zero_is_not_basic_offscreen():
+    assert detect_offscreen(KW, S(clip="rect(0px, 0px, 0px, 0px)")) is None
+def test_clip_path_inset_is_not_basic_offscreen():
+    assert detect_offscreen(KW, S(clipPath="inset(100%)")) is None
+def test_one_px_box_is_not_basic_offscreen():
+    assert detect_offscreen(KW, S(overflow="hidden"), {**OK_RECT, "width": 1, "height": 1}) is None
+def test_zero_height_box_without_overflow_not_flagged():
+    assert detect_offscreen(KW, S(), {**OK_RECT, "height": 0}) is None
 def test_normal_visible_text():
     assert detect_offscreen(KW, S()) is None
 def test_skip_nav_without_keyword_not_flagged():
@@ -86,3 +90,12 @@ if __name__ == "__main__":
         try: f(); print("PASS ", n)
         except Exception as e: failed += 1; print("FAIL ", n, "->", type(e).__name__, e)
     print(f"\n{len(tests)-failed}/{len(tests)} passed")
+
+
+def test_hidden_container_with_two_children_reports_each_element():
+    # 주최 측 답변: 은닉된 상위 요소 안에 광고 문구 하위 요소가 2개면 2건(요소별). 상위 컨테이너 1건이면 나머지는 미검출.
+    els = [_el("http://a/", "div.hide > p:nth-of-type(1)", KW, S(), ZERO),
+           _el("http://a/", "div.hide > p:nth-of-type(2)", "바카라 필승법", S(), ZERO),
+           _el("http://a/", "div.hide", "", S(display="none"), ZERO)]          # 컨테이너 자체는 직접 텍스트가 없다
+    out = detect_offscreen_in_elements(els)
+    assert [f["location"] for f in out] == ["div.hide > p:nth-of-type(1)", "div.hide > p:nth-of-type(2)"]

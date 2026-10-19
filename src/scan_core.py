@@ -13,9 +13,9 @@ from typing import Callable, Dict, List, Optional
 if getattr(sys, "frozen", False):
     os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", "0")
 
-from pipeline import run_all_detectors
+from pipeline import run_all_detectors, run_extra_detectors
 from report import write_report
-from result_writer import DEFAULT_TOPIC, build_result, validate_result, write_result
+from result_writer import DEFAULT_TOPIC, build_extra_result, build_result, validate_result, write_result
 
 DEFAULT_MAX_PAGES = 1000
 DEFAULT_TIMEOUT_SEC = 1380.0      # 크롤링 제한 23분: 30분 상한에서 마지막 페이지 마무리·탐지·파일 저장 여유를 남긴다
@@ -69,6 +69,7 @@ def run_scan(url: str, *, max_pages: int = DEFAULT_MAX_PAGES, timeout: float = D
         log = lambda s: (real_out.write(s + "\n"), real_out.flush())
     started = datetime.now().astimezone()                   # '탐지 시작' 시각
     findings: List[Dict] = []
+    extras: List[Dict] = []
     pages, n_elements, status, error = 0, 0, 0, None
     stopped = False
 
@@ -80,6 +81,7 @@ def run_scan(url: str, *, max_pages: int = DEFAULT_MAX_PAGES, timeout: float = D
         log("[*] 탐지기 실행 중...")
         with contextlib.redirect_stdout(_LineWriter(log)):
             findings = run_all_detectors(data["elements"])
+            extras = run_extra_detectors(data["elements"], findings)
     except Exception as e:                                   # 크롤링이 죽어도 빈 결과 파일은 남긴다
         error = f"{type(e).__name__}: {e}"
         log(f"[!] 실행 중 오류: {error}")
@@ -93,6 +95,8 @@ def run_scan(url: str, *, max_pages: int = DEFAULT_MAX_PAGES, timeout: float = D
         log(f"[!] 스키마 경고: {p}")
 
     result_path = write_result(result, out_dir / "result.json")
+    extra_result = build_extra_result(url, started, finished, extras, topic)
+    extra_path = write_result(extra_result, out_dir / "result_extra.json")
     details = {(f["url"], f["location"], f["technique"]): f.get("detail", {}).get("reason", "") for f in findings}
     try:
         report_path = write_report(result, out_dir / "report.html", details)
@@ -105,6 +109,8 @@ def run_scan(url: str, *, max_pages: int = DEFAULT_MAX_PAGES, timeout: float = D
         by_tech[f["technique"]] = by_tech.get(f["technique"], 0) + 1
     log(f"[+] 탐지 {len(result['findings'])}건 {by_tech} (소요 {result['meta']['elapsed_sec']}초)")
     log(f"[+] 결과 저장: {result_path.resolve()}")
+    log(f"[+] 추가 탐지 {len(extra_result['findings'])}건 저장: {extra_path.resolve()}")
     return {"result": result, "details": details, "result_path": result_path, "report_path": report_path,
+            "extra": extra_result, "extra_path": extra_path,
             "pages": pages, "elements": n_elements, "problems": problems, "error": error,
             "stopped": stopped, "status": status or (1 if problems else 0)}

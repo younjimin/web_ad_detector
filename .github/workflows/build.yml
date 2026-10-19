@@ -62,6 +62,7 @@ jobs:
           .\dist\PublicWebScan\PublicWebScan.exe http://localhost:8000/index.html --out smoke
           if ($LASTEXITCODE -ne 0) { throw "exe exit code $LASTEXITCODE" }
           python -c "import json; d=json.load(open('smoke/result.json',encoding='utf-8')); n=len(d['findings']); print('findings', n); assert n == 13"
+          python -c "import json; d=json.load(open('smoke/result_extra.json',encoding='utf-8')); print('extra', len(d['findings'])); assert 'findings' in d and 'meta' in d"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

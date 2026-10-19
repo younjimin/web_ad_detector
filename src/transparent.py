@@ -52,8 +52,7 @@ def detect_transparent(text, style, eff_opacity=None, eff_bg=None):
                 ratio = contrast_ratio(fg, bg)
                 if ratio < CONTRAST_LIMIT:
                     reasons.append(f"contrast={ratio:.2f}")
-    if style.get("visibility") == "hidden":
-        reasons.append("visibility:hidden")
+    # visibility:hidden 은 주최 측 답변상 기본 4종 정답이 아니다 → extra.py(ETC)에서 다룬다
     if not reasons:
         return None
     return {"evidence_text": text, "matched_keywords": kws, "reasons": reasons}

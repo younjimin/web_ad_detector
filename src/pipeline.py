@@ -2,6 +2,7 @@
 from typing import Dict, List
 
 from homoglyph import detect_homoglyph_in_elements
+from src.extra import detect_extra_in_elements
 from jamo import detect_jamo_in_elements
 from offscreen import detect_offscreen_in_elements
 from transparent import detect_transparent_in_elements
@@ -32,3 +33,12 @@ def run_all_detectors(elements: List[Dict]) -> List[Dict]:
             seen.add(key)
             findings.append(f)
     return findings
+
+
+def run_extra_detectors(elements: List[Dict], basic_findings: List[Dict]) -> List[Dict]:
+    """기본 4종 밖의 추가 탐지(ETC). 예외가 나도 빈 목록을 돌려줘 기본 결과에 영향을 주지 않는다."""
+    try:
+        return detect_extra_in_elements(elements, basic_findings)
+    except Exception as e:
+        print(f"[!] 추가 탐지기 오류: {type(e).__name__}: {e}")
+        return []

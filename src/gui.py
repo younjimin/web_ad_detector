@@ -276,7 +276,9 @@ class App:
         if ret.get("error"):
             self.status_var.set(f"오류가 있었지만 가능한 결과를 저장했습니다: {ret['error']}")
         else:
-            self.status_var.set(f"완료{tail} — {ret['pages']}개 페이지 검사, {n}건 탐지. 결과 파일: {ret['result_path']}")
+            n_extra = len((ret.get("extra") or {}).get("findings", []))
+            more = f" (+추가 탐지 {n_extra}건: result_extra.json)" if n_extra else ""
+            self.status_var.set(f"완료{tail} — {ret['pages']}개 페이지 검사, {n}건 탐지{more}. 결과 파일: {ret['result_path']}")
 
     def on_close(self):
         if self.running:
