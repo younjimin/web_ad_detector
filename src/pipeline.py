@@ -2,7 +2,7 @@
 from typing import Dict, List
 
 from homoglyph import detect_homoglyph_in_elements
-from src.extra import detect_extra_in_elements
+from extra import detect_extra_in_elements
 from jamo import detect_jamo_in_elements
 from offscreen import detect_offscreen_in_elements
 from transparent import detect_transparent_in_elements
