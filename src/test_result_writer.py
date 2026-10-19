@@ -53,7 +53,7 @@ def test_build_extra_result_schema():
     from result_writer import build_extra_result
     ex = [{"url": "u", "location": "p.a", "evidence_text": "근거", "extra_finding": "visibility:hidden 은닉", "technique": "ETC"}]
     r = build_extra_result("http://a/", T0, T0, ex)
-    assert r["findings"] == [{"id": "x_001", "url": "u", "is_violation": True, "location": "p.a", "evidence_text": "근거",
+    assert r["findings"] == [{"id": "f_001", "url": "u", "is_violation": True, "location": "p.a", "evidence_text": "근거",
                               "technique": "ETC", "extra_finding": "visibility:hidden 은닉"}]
     assert r["meta"]["topic"] == "TOPIC" and set(r["meta"]) == set(build_result("u", T0, T0, [])["meta"])
 

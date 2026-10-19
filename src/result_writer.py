@@ -45,7 +45,7 @@ def build_extra_result(entry_url: str, started_at: datetime, finished_at: dateti
     items = []
     for i, f in enumerate(findings, 1):
         items.append({
-            "id": f"x_{i:03d}",
+            "id": f"f_{i:03d}",
             "url": f["url"],
             "is_violation": bool(f.get("is_violation", True)),
             "location": f["location"],
